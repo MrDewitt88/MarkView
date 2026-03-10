@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useEffect } from "react";
-import type { FrontmatterConfig } from "@teammind/markview-engine";
+import type { FrontmatterConfig } from "@teammind/markview-engine/browser";
 
 interface TTSConfig {
   endpoint?: string;
@@ -57,6 +57,70 @@ export function Viewer({
   if (frontmatter.lineHeight) {
     customStyles.lineHeight = frontmatter.lineHeight;
   }
+
+  // "Read from here" context menu on text selection
+  useEffect(() => {
+    const container = contentRef.current;
+    if (!container) return;
+
+    const handleContextMenu = async (e: MouseEvent): Promise<void> => {
+      const selection = window.getSelection();
+      const anchor = selection?.anchorNode;
+      if (!anchor || !container.contains(anchor)) return;
+
+      // Collect all text from the clicked element to the end of the document
+      let startEl = anchor.nodeType === Node.TEXT_NODE ? anchor.parentElement : anchor as HTMLElement;
+      if (!startEl) return;
+
+      // Walk up to find the nearest block-level element
+      while (startEl && !["P", "H1", "H2", "H3", "H4", "H5", "H6", "LI", "BLOCKQUOTE", "DIV", "ARTICLE"].includes(startEl.tagName)) {
+        startEl = startEl.parentElement;
+      }
+      if (!startEl || !container.contains(startEl)) return;
+
+      // Collect text from this element to the end
+      let text = "";
+      let current: Element | null = startEl;
+      while (current && container.contains(current)) {
+        // Skip code blocks and mermaid diagrams
+        if (!current.classList?.contains("mermaid-diagram") && current.tagName !== "PRE") {
+          text += (current.textContent ?? "") + " ";
+        }
+        current = current.nextElementSibling;
+      }
+
+      const trimmed = text.trim();
+      if (!trimmed || !ttsConfig?.token) return;
+
+      // Add custom context menu item
+      e.preventDefault();
+      const menu = document.createElement("div");
+      menu.className = "tts-context-menu";
+      menu.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;z-index:9999;background:#1a1a2e;color:#fff;border-radius:6px;padding:4px 0;box-shadow:0 4px 12px rgba(0,0,0,.3);font-size:13px;`;
+      const item = document.createElement("div");
+      item.style.cssText = "padding:6px 16px;cursor:pointer;white-space:nowrap;";
+      item.textContent = "\u{1F50A} Ab hier vorlesen";
+      item.addEventListener("mouseenter", () => { item.style.background = "#2a2a4a"; });
+      item.addEventListener("mouseleave", () => { item.style.background = "transparent"; });
+      item.addEventListener("click", async () => {
+        menu.remove();
+        await window.markview.ttsSpeak(trimmed, ttsConfig);
+      });
+      menu.appendChild(item);
+      document.body.appendChild(menu);
+
+      const dismiss = (ev: Event) => {
+        if (!menu.contains(ev.target as Node)) {
+          menu.remove();
+          document.removeEventListener("click", dismiss);
+        }
+      };
+      setTimeout(() => document.addEventListener("click", dismiss), 0);
+    };
+
+    container.addEventListener("contextmenu", handleContextMenu);
+    return () => container.removeEventListener("contextmenu", handleContextMenu);
+  }, [resolvedHtml, ttsConfig]);
 
   // Inject per-section speak buttons next to headings
   useEffect(() => {

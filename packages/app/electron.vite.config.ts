@@ -40,7 +40,7 @@ export default defineConfig({
         },
         // Node-only deps pulled in transitively by @teammind/markview-engine
         // must not be bundled into the browser renderer.
-        external: ["linkedom", "playwright", "playwright-core", "fs", "fs/promises", "path", "node:fs", "node:fs/promises", "node:path"],
+        external: ["linkedom", "playwright", "playwright-core"],
       },
     },
     plugins: [react()],

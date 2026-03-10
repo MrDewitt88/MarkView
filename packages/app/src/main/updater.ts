@@ -1,15 +1,25 @@
 import { dialog } from "electron";
-import { autoUpdater } from "electron-updater";
 
-export function initAutoUpdater(): void {
-  autoUpdater.autoDownload = true;
-  autoUpdater.autoInstallOnAppQuit = true;
+let autoUpdater: typeof import("electron-updater").autoUpdater | null = null;
 
-  autoUpdater.on("update-available", (info) => {
+async function getUpdater() {
+  if (!autoUpdater) {
+    const mod = await import("electron-updater");
+    autoUpdater = mod.autoUpdater;
+  }
+  return autoUpdater;
+}
+
+export async function initAutoUpdater(): Promise<void> {
+  const updater = await getUpdater();
+  updater.autoDownload = true;
+  updater.autoInstallOnAppQuit = true;
+
+  updater.on("update-available", (info) => {
     console.log(`Update available: ${info.version}`);
   });
 
-  autoUpdater.on("update-downloaded", (info) => {
+  updater.on("update-downloaded", (info) => {
     dialog
       .showMessageBox({
         type: "info",
@@ -22,18 +32,19 @@ export function initAutoUpdater(): void {
       })
       .then(({ response }) => {
         if (response === 0) {
-          autoUpdater.quitAndInstall();
+          updater.quitAndInstall();
         }
       });
   });
 
-  autoUpdater.on("error", (err) => {
+  updater.on("error", (err) => {
     console.error("Auto-updater error:", err);
   });
 
-  autoUpdater.checkForUpdatesAndNotify();
+  updater.checkForUpdatesAndNotify();
 }
 
-export function checkForUpdatesManually(): void {
-  autoUpdater.checkForUpdatesAndNotify();
+export async function checkForUpdatesManually(): Promise<void> {
+  const updater = await getUpdater();
+  updater.checkForUpdatesAndNotify();
 }

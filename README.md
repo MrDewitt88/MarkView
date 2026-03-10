@@ -12,19 +12,32 @@
 
 ## Features
 
+| # | Feature | CLI | App | Engine |
+|---|---------|:---:|:---:|:------:|
+| F1 | **TTS partial read** — line ranges (`--from`/`--to`), pattern matching, right-click "Ab hier vorlesen" in viewer | x | x | x |
+| F2 | **MCP server** — 8 tools for AI agents (render, export, lint, toc, extract, speak, diff, search) | x | | x |
+| F3 | **Multi-file projects** — `include:` frontmatter directive, recursive up to 5 levels | x | | x |
+| F4 | **Template variables** — `{{date}}`, `{{wordcount}}`, `{{readtime}}`, custom vars in frontmatter | x | x | x |
+| F5 | **Accessibility linting** — img-alt, heading-order, link-text, table-header, lang checks | x | | x |
+| F6 | **Markdown diff** — LCS-based line comparison, `--git` integration | x | | x |
+| F7 | **PDF password protection** — `--password`, `--no-print`, `--no-copy` (placeholder) | x | | x |
+| F8 | **Full-text search** — search across Markdown files in a directory | x | | x |
+| F9 | **Live collaboration** — CollabSession scaffold via TeamMind WebSocket (coming soon) | | | x |
+| F10 | **Custom CSS** — `style:` field in frontmatter, appended after template CSS | x | x | x |
+| F11 | **QR codes in export** — `qr:` frontmatter field, SVG generation, footer positioning | x | | x |
+| F12 | **Word count & reading time** — live in status bar, available as template variables | | x | x |
+| F13 | **Auto-update** — `electron-updater` with user confirmation dialog | | x | |
+| F14 | **Email export** — HTML with inlined CSS via juice, no external resources | x | | x |
+
+### Core
+
 - **Full rendering pipeline** — GFM, Mermaid diagrams, Shiki syntax highlighting, KaTeX math
 - **Export** — PDF, HTML, PNG, and email-safe HTML with inlined CSS
 - **Templates** — Default, Report, Minimal — or custom CSS via frontmatter
-- **TTS** — Read documents aloud via Speaklone (partial reads, line ranges, pattern matching)
+- **TTS** — Read documents aloud via Speaklone (partial reads, line ranges, right-click context menu)
 - **Linting** — Frontmatter validation, Mermaid syntax checks, accessibility rules
-- **Multi-file projects** — Compose documents with `include:` directives
-- **Variables** — `{{date}}`, `{{wordcount}}`, `{{readtime}}`, and custom vars in frontmatter
-- **Search** — Full-text search across Markdown files
-- **Diff** — Compare two Markdown files with line-level diffing
-- **QR codes** — Embed QR codes in PDF/HTML exports
 - **Digital signatures** — Sign and verify PDFs
 - **MCP server** — First-class AI agent integration via Model Context Protocol
-- **Live collaboration** — Real-time editing via TeamMind (coming soon)
 
 <p align="center">
   <img src="TeamMind%20MarkView%20with%20Speaklone%20reading%20the%20md-File.png" alt="TeamMind MarkView with Speaklone TTS" width="800" />

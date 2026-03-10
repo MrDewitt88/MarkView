@@ -16,7 +16,10 @@ import { extractToc } from "./plugins/toc.js";
 import { processMermaidBlocks } from "./plugins/mermaid.js";
 import { buildStyles } from "./templates/index.js";
 import { resolveVariables } from "./plugins/variables.js";
-import { resolveIncludes } from "./plugins/includes.js";
+// Lazy-imported to avoid pulling fs/path into browser bundles.
+// The variable indirection prevents bundlers from statically resolving the import.
+const _includesPath = "./plugins/includes.js";
+const loadIncludes = () => import(/* @vite-ignore */ _includesPath) as Promise<typeof import("./plugins/includes.js")>;
 
 /**
  * Render Markdown to HTML with full plugin pipeline:
@@ -34,6 +37,7 @@ export async function render(
 
   // 1a. Resolve includes if present and basePath is provided
   if (frontmatter.include?.length && options?.basePath) {
+    const { resolveIncludes } = await loadIncludes();
     rawContent = await resolveIncludes(markdown, options.basePath);
   }
 

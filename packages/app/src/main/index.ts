@@ -4,7 +4,8 @@ import { pathToFileURL } from "url";
 import { registerIpcHandlers } from "./ipc.js";
 import { openFile, getRecentFiles, stopWatching } from "./file-handler.js";
 import { createAppMenu } from "./menu.js";
-import { initAutoUpdater } from "./updater.js";
+// Lazy-loaded after app.whenReady() to avoid electron-updater accessing app before init
+const loadUpdater = () => import("./updater.js");
 
 const isDev = !app.isPackaged;
 const iconPath = isDev
@@ -117,7 +118,7 @@ app.whenReady().then(() => {
 
   createAppMenu(() => mainWindow);
   createWindow();
-  initAutoUpdater();
+  loadUpdater().then((m) => m.initAutoUpdater());
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {

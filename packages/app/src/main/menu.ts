@@ -1,6 +1,6 @@
 import { Menu, app, shell, dialog, type BrowserWindow } from "electron";
 import { installCli, uninstallCli, isCliInstalled } from "./install-cli.js";
-import { checkForUpdatesManually } from "./updater.js";
+const checkForUpdatesManually = () => import("./updater.js").then((m) => m.checkForUpdatesManually());
 
 export function createAppMenu(getWindow: () => BrowserWindow | null): void {
   const isMac = process.platform === "darwin";

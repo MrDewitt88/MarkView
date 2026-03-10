@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { render } from "@teammind/markview-engine";
-import type { FrontmatterConfig, TocEntry } from "@teammind/markview-engine";
+import { render } from "@teammind/markview-engine/browser";
+import type { FrontmatterConfig, TocEntry } from "@teammind/markview-engine/browser";
 
 interface UseMarkdownResult {
   html: string;

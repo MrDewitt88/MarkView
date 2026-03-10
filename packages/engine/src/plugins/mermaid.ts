@@ -1,5 +1,9 @@
 import type { Root, Element, Text } from "hast";
-import { ensureDomShim } from "../dom-shim.js";
+
+// Dynamic import to prevent bundlers from inlining dom-shim (and its linkedom
+// references) into browser bundles where they cause TDZ errors.
+const _domShimPath = "../dom-shim.js";
+const loadDomShim = () => import(/* @vite-ignore */ _domShimPath) as Promise<{ ensureDomShim: () => Promise<void> }>;
 
 /**
  * Detect ```mermaid code blocks in the hast tree,
@@ -90,13 +94,19 @@ export async function processMermaidBlocks(tree: Root): Promise<void> {
 // ---------------------------------------------------------------------------
 
 let mermaidInitialized = false;
+let renderCounter = 0;
 
 async function tryJsdomRender(
   code: string,
   id: string,
 ): Promise<string | null> {
   try {
-    await ensureDomShim();
+    // In browser/Electron the real DOM is available — skip the shim.
+    // Only load dom-shim in Node.js (CLI, tests) where window is absent.
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      const { ensureDomShim } = await loadDomShim();
+      await ensureDomShim();
+    }
 
     const mermaid = await import("mermaid");
     const mermaidApi = mermaid.default;
@@ -111,14 +121,18 @@ async function tryJsdomRender(
       mermaidInitialized = true;
     }
 
+    // Use a unique ID per render call to avoid duplicate element ID clashes in the DOM
+    const uniqueId = `${id}-${renderCounter++}`;
+
     const result = await Promise.race([
-      mermaidApi.render(id, code),
+      mermaidApi.render(uniqueId, code),
       new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error("Mermaid render timeout")), 3000),
+        setTimeout(() => reject(new Error("Mermaid render timeout")), 10000),
       ),
     ]);
     return result.svg;
-  } catch {
+  } catch (err) {
+    console.warn("[mermaid] render failed:", err instanceof Error ? err.message : String(err));
     return null; // Signal that this diagram needs Playwright
   }
 }
