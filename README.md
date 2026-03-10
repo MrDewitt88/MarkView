@@ -1,167 +1,130 @@
 <p align="center">
-  <img src="packages/app/src/renderer/assets/logo.png" alt="TeamMind MarkView" width="128" height="128" />
+  <img src="MarkView.png" alt="TeamMind MarkView" width="160" />
 </p>
 
 <h1 align="center">TeamMind MarkView</h1>
 
 <p align="center">
-  The missing OS for Markdown — in the age of AI agents.
+  Markdown rendering, export, and preview — as CLI, Electron app, and MCP server.
 </p>
 
 ---
 
-Part of the [TeamMind](https://team-mind.eu) ecosystem by Digitale Projekte RF GmbH.
+## Features
+
+- **Full rendering pipeline** — GFM, Mermaid diagrams, Shiki syntax highlighting, KaTeX math
+- **Export** — PDF, HTML, PNG, and email-safe HTML with inlined CSS
+- **Templates** — Default, Report, Minimal — or custom CSS via frontmatter
+- **TTS** — Read documents aloud via Speaklone (partial reads, line ranges, pattern matching)
+- **Linting** — Frontmatter validation, Mermaid syntax checks, accessibility rules
+- **Multi-file projects** — Compose documents with `include:` directives
+- **Variables** — `{{date}}`, `{{wordcount}}`, `{{readtime}}`, and custom vars in frontmatter
+- **Search** — Full-text search across Markdown files
+- **Diff** — Compare two Markdown files with line-level diffing
+- **QR codes** — Embed QR codes in PDF/HTML exports
+- **Digital signatures** — Sign and verify PDFs
+- **MCP server** — First-class AI agent integration via Model Context Protocol
+- **Live collaboration** — Real-time editing via TeamMind (coming soon)
+
+<p align="center">
+  <img src="TeamMind%20MarkView%20with%20Speaklone%20reading%20the%20md-File.png" alt="TeamMind MarkView with Speaklone TTS" width="800" />
+</p>
 
 ## Packages
 
-| Package | npm | Description |
-|---------|-----|-------------|
-| @teammind/markview-engine | Engine | Headless render engine |
-| @teammind/markview-cli | CLI | Command-line interface |
-| @teammind/markview-app | App | Electron GUI (Viewer + Builder) |
+| Package | Description |
+|---------|-------------|
+| `packages/engine` | Core rendering, export, lint, TTS, diff, search |
+| `packages/cli` | Command-line interface (`markview`) |
+| `packages/app` | Electron desktop application |
+| `packages/mcp` | MCP server for AI agents |
 
 ## Quick Start
 
 ```bash
-npm install -g @teammind/markview-cli
-markview render README.md
-markview serve README.md
-markview export README.md --format pdf
-```
-
-## Installation
-
-### Engine (library)
-
-```bash
-npm install @teammind/markview-engine
-```
-
-### CLI
-
-```bash
-npm install -g @teammind/markview-cli
-```
-
-### Desktop App
-
-Build from source:
-
-```bash
+# Install dependencies
 pnpm install
-pnpm build
-cd packages/app && npx electron-builder --mac dmg --config build/electron-builder.yml
+
+# Build all packages
+pnpm -r build
+
+# Run tests
+pnpm --filter @teammind/markview-engine test
 ```
 
 ## CLI Usage
 
 ```bash
-# Render Markdown to HTML
-markview render doc.md -o output.html
+# Render Markdown
+markview render doc.md
 
-# Export to PDF
-markview render doc.md -o output.pdf
+# Export as PDF
+markview export doc.md --format pdf -o output.pdf
+
+# Export as email-safe HTML
+markview export doc.md --format email -o newsletter.html
 
 # Live preview in browser
 markview serve doc.md
 
 # Lint for issues
-markview lint "docs/**/*.md"
+markview lint doc.md --a11y
 
 # Read aloud via Speaklone
-markview speak doc.md --voice aiden
+markview speak doc.md --from 42 --to 100
 
-# Configure TTS
-markview config setup
+# Search across files
+markview search "API config" ./docs/
+
+# Compare two files
+markview diff old.md new.md
+
+# Start MCP server
+markview mcp
 ```
 
-## Engine (programmatic)
+## Frontmatter
 
-```typescript
-import { render } from "@teammind/markview-engine";
+```yaml
+---
+title: My Document
+author: Jane Doe
+template: report
+toc: true
+font: Inter
+style: |
+  h1 { color: #e63946; }
+vars:
+  company: TeamMind
+  version: 1.0.0
+include:
+  - chapter1.md
+  - chapter2.md
+qr: https://example.com
+---
 
-const { html, frontmatter, toc } = await render("# Hello\n\nSome **bold** text.");
+# {{title}} v{{version}}
+
+Created by {{author}} on {{date}}.
+Word count: {{wordcount}} | Reading time: {{readtime}}.
 ```
 
-## Desktop App
+## MCP Configuration
 
-Open any `.md` file to get a rendered preview with:
+Add to Claude Desktop or any MCP-compatible client:
 
-- Table of contents sidebar
-- Dark/light theme toggle
-- Live reload on file changes
-- Split-pane editor mode (Builder)
-- One-click PDF and HTML export
-- Text-to-speech via [Speaklone](https://speaklone.com)
-
-## Text-to-Speech (Speaklone)
-
-MarkView integrates with [Speaklone](https://speaklone.com) for local text-to-speech. Speaklone runs a local API on `http://localhost:7849` and plays audio directly on your machine — no audio data leaves your device.
-
-### Setup
-
-1. Install and start [Speaklone](https://speaklone.com)
-2. In Speaklone: Settings → Local API → copy your API token
-3. In MarkView App: MarkView menu → TTS Settings → paste token
-4. Or via CLI: `markview config set tts.token "YOUR_TOKEN"`
-
-### Usage
-
-- **App**: Click the speaker button in the toolbar to read the entire document, or hover over headings for per-section playback
-- **CLI**: `markview speak doc.md` — optionally with `--voice`, `--section`, `--temperature`
-
-Available voices: Aiden, Ryan, Vivian, Serena, Dylan, Eric, Sohee, Ono Anna, Uncle Fu.
-
-## Features
-
-- **GFM**: Tables, task lists, strikethrough, autolinks
-- **Mermaid diagrams**: Rendered as inline SVGs
-- **Syntax highlighting**: Powered by Shiki with language auto-detection
-- **Frontmatter**: YAML metadata for templates, headers, footers
-- **Templates**: Default, report, and minimal CSS themes
-- **PDF export**: Headers, footers, page numbers, custom margins
-- **Linting**: Validate frontmatter, Mermaid syntax, internal links
-- **TTS**: Read documents aloud with Speaklone integration
-
-## Development
-
-### Prerequisites
-
-- Node.js 20+
-- pnpm 9+
-
-### Setup
-
-```bash
-pnpm install
-pnpm build
+```json
+{
+  "mcpServers": {
+    "markview": {
+      "command": "markview",
+      "args": ["mcp"],
+      "type": "stdio"
+    }
+  }
+}
 ```
-
-### Scripts
-
-| Script | Description |
-|---|---|
-| `pnpm build` | Build all packages |
-| `pnpm dev` | Start all packages in watch mode |
-| `pnpm test` | Run all tests |
-| `pnpm release:app` | Build Electron app for distribution |
-
-### Project Structure
-
-```
-packages/
-  engine/     # @teammind/markview-engine — rendering, export, TTS extraction
-  cli/        # @teammind/markview-cli — command-line interface
-  app/        # Electron desktop application
-```
-
-### Developer
-
-Alexander Fischer
-Theseus-AT e.U. / Digitale Projekte RF GmbH
-https://theseus.at
-https://team-mind.eu
 
 ## License
 
-[MIT](./LICENSE)
+Proprietary — Digitale Projekte RF GmbH
