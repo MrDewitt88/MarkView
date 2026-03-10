@@ -1,0 +1,21 @@
+{
+  "name": "markview",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "release:engine": "pnpm --filter @markview/engine publish",
+    "release:cli": "pnpm --filter @markview/cli publish",
+    "release:app": "pnpm --filter markview-app electron-builder"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "packageManager": "pnpm@9.15.4"
+}

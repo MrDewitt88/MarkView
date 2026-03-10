@@ -1,0 +1,177 @@
+const css = `/* MarkView Default Template — Clean, readable typography */
+
+.markview-document {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #1a1a1a;
+  background: #fff;
+}
+
+/* Headings */
+.markview-document h1 {
+  font-size: 2em;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 0.3em;
+}
+
+.markview-document h2 {
+  font-size: 1.5em;
+  margin-top: 1.4em;
+  margin-bottom: 0.4em;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.25em;
+}
+
+.markview-document h3 {
+  font-size: 1.25em;
+  margin-top: 1.3em;
+  margin-bottom: 0.3em;
+}
+
+.markview-document h4 {
+  font-size: 1.1em;
+  margin-top: 1.2em;
+  margin-bottom: 0.3em;
+}
+
+/* Paragraphs & inline */
+.markview-document p {
+  margin: 0.8em 0;
+}
+
+.markview-document a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+.markview-document a:hover {
+  text-decoration: underline;
+}
+
+.markview-document strong {
+  font-weight: 600;
+}
+
+.markview-document img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Code blocks — rounded */
+.markview-document pre {
+  background: #f6f8fa;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.9em;
+  line-height: 1.45;
+}
+
+.markview-document code {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  font-size: 0.9em;
+}
+
+.markview-document :not(pre) > code {
+  background: #f0f0f0;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+}
+
+/* Blockquotes */
+.markview-document blockquote {
+  border-left: 4px solid #0366d6;
+  margin: 1em 0;
+  padding: 0.5em 1em;
+  background: #f8f9fa;
+  border-radius: 0 4px 4px 0;
+  color: #555;
+}
+
+.markview-document blockquote p {
+  margin: 0.4em 0;
+}
+
+/* Tables — responsive */
+.markview-document table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  display: block;
+  overflow-x: auto;
+}
+
+.markview-document th,
+.markview-document td {
+  border: 1px solid #dfe2e5;
+  padding: 0.6em 0.8em;
+  text-align: left;
+}
+
+.markview-document th {
+  background: #f6f8fa;
+  font-weight: 600;
+}
+
+.markview-document tr:nth-child(even) {
+  background: #fafbfc;
+}
+
+/* Lists */
+.markview-document ul,
+.markview-document ol {
+  padding-left: 2em;
+  margin: 0.5em 0;
+}
+
+.markview-document li {
+  margin: 0.25em 0;
+}
+
+/* Horizontal rule */
+.markview-document hr {
+  border: none;
+  border-top: 2px solid #e5e5e5;
+  margin: 2em 0;
+}
+
+/* Mermaid diagrams */
+.markview-document .mermaid-diagram {
+  text-align: center;
+  margin: 1.5em 0;
+}
+
+/* Header/Footer areas */
+.markview-header,
+.markview-footer {
+  font-size: 0.85em;
+  color: #666;
+  padding: 0.5em 0;
+}
+
+.markview-header {
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 1.5em;
+}
+
+.markview-footer {
+  border-top: 1px solid #e5e5e5;
+  margin-top: 1.5em;
+  text-align: center;
+}
+
+/* Print styles */
+@media print {
+  .markview-document {
+    max-width: none;
+    padding: 0;
+  }
+}`;
+
+export default css;

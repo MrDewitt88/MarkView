@@ -1,0 +1,11 @@
+node_modules/
+dist/
+release/
+out/
+*.dmg
+*.dmg.blockmap
+.DS_Store
+.env
+.env.local
+.turbo/
+*.tsbuildinfo

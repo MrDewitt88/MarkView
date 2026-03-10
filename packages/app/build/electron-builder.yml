@@ -1,0 +1,98 @@
+appId: com.markview.app
+productName: MarkView
+copyright: Copyright (c) 2026 MarkView Contributors
+
+directories:
+  buildResources: resources
+  output: release
+
+files:
+  - out/**/*
+  - "!node_modules/**/*"
+
+# Optimizations: remove unused locales to reduce size
+electronLanguages:
+  - en
+  - de
+
+asar: true
+compression: maximum
+
+mac:
+  category: public.app-category.developer-tools
+  icon: resources/icons/icon.icns
+  darkModeSupport: true
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+  extendInfo:
+    CFBundleDocumentTypes:
+      - CFBundleTypeName: Markdown Document
+        CFBundleTypeRole: Editor
+        LSHandlerRank: Default
+        CFBundleTypeExtensions:
+          - md
+          - markdown
+        LSItemContentTypes:
+          - net.daringfireball.markdown
+
+dmg:
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications
+
+win:
+  icon: resources/icons/icon.ico
+  target:
+    - target: nsis
+      arch:
+        - x64
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: true
+
+linux:
+  icon: resources/icons
+  category: Development
+  target:
+    - target: AppImage
+      arch:
+        - x64
+    - target: deb
+      arch:
+        - x64
+  desktop:
+    MimeType: text/markdown;text/x-markdown
+
+deb:
+  depends:
+    - gconf2
+    - gconf-service
+    - libnotify4
+    - libappindicator1
+    - libxtst6
+    - libnss3
+
+fileAssociations:
+  - ext: md
+    name: Markdown Document
+    description: Markdown Document
+    mimeType: text/markdown
+    role: Editor
+  - ext: markdown
+    name: Markdown Document
+    description: Markdown Document
+    mimeType: text/markdown
+    role: Editor
+
+publish:
+  provider: github
+  releaseType: release
