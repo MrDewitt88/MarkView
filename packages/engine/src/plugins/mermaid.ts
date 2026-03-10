@@ -124,11 +124,15 @@ async function tryJsdomRender(
       mermaidInitialized = true;
     }
 
+    // Normalize diagram type keywords to the casing Mermaid 11 expects.
+    // Mermaid's detector regexes are case-sensitive (e.g. /^\s*gitGraph/).
+    const normalizedCode = normalizeDiagramKeywords(code);
+
     // Use a unique ID per render call to avoid duplicate element ID clashes in the DOM
     const uniqueId = `${id}-${renderCounter++}`;
 
     const result = await Promise.race([
-      mermaidApi.render(uniqueId, code),
+      mermaidApi.render(uniqueId, normalizedCode),
       new Promise<never>((_, reject) =>
         setTimeout(() => reject(new Error("Mermaid render timeout")), 10000),
       ),
@@ -184,6 +188,47 @@ async function tryPlaywrightRender(codes: string[]): Promise<(string | null)[]> 
     // Playwright not available or failed entirely — return all nulls
     return codes.map(() => null);
   }
+}
+
+// ---------------------------------------------------------------------------
+// Diagram keyword normalization
+// ---------------------------------------------------------------------------
+
+/**
+ * Mermaid 11 uses case-sensitive regexes to detect diagram types.
+ * Normalize common misspellings / lowercase variants to the expected casing.
+ */
+const DIAGRAM_KEYWORD_MAP: [RegExp, string][] = [
+  [/^(\s*)gitgraph\b/i, "$1gitGraph"],
+  [/^(\s*)flowchart\b/i, "$1flowchart"],
+  [/^(\s*)sequencediagram\b/i, "$1sequenceDiagram"],
+  [/^(\s*)classdiagram\b/i, "$1classDiagram"],
+  [/^(\s*)statediagram\b/i, "$1stateDiagram"],
+  [/^(\s*)erdiagram\b/i, "$1erDiagram"],
+  [/^(\s*)gantt\b/i, "$1gantt"],
+  [/^(\s*)pie\b/i, "$1pie"],
+  [/^(\s*)mindmap\b/i, "$1mindmap"],
+  [/^(\s*)timeline\b/i, "$1timeline"],
+  [/^(\s*)journey\b/i, "$1journey"],
+  [/^(\s*)requirementdiagram\b/i, "$1requirementDiagram"],
+  [/^(\s*)c4context\b/i, "$1C4Context"],
+  [/^(\s*)c4container\b/i, "$1C4Container"],
+  [/^(\s*)c4component\b/i, "$1C4Component"],
+  [/^(\s*)c4dynamic\b/i, "$1C4Dynamic"],
+  [/^(\s*)c4deployment\b/i, "$1C4Deployment"],
+  [/^(\s*)sankey-beta\b/i, "$1sankey-beta"],
+  [/^(\s*)xychart-beta\b/i, "$1xychart-beta"],
+  [/^(\s*)block-beta\b/i, "$1block-beta"],
+  [/^(\s*)quadrantchart\b/i, "$1quadrantChart"],
+];
+
+function normalizeDiagramKeywords(code: string): string {
+  for (const [pattern, replacement] of DIAGRAM_KEYWORD_MAP) {
+    if (pattern.test(code)) {
+      return code.replace(pattern, replacement);
+    }
+  }
+  return code;
 }
 
 // ---------------------------------------------------------------------------
