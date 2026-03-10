@@ -108,7 +108,10 @@ async function tryJsdomRender(
       await ensureDomShim();
     }
 
-    const mermaid = await import("mermaid");
+    // Import the full ESM bundle (not mermaid.core.mjs) to include all diagram
+    // types (gitGraph, mindmap, etc.) without relying on dynamic chunk loading
+    // which fails in bundled Electron/Vite environments.
+    const mermaid = await import("mermaid/dist/mermaid.esm.mjs");
     const mermaidApi = mermaid.default;
 
     if (!mermaidInitialized) {
