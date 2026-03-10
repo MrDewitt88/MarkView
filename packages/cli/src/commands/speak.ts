@@ -8,6 +8,8 @@ import {
   getVoices,
   extractSpeakableText,
   extractSection,
+  extractFromLine,
+  extractFromPattern,
   splitIntoChunks,
 } from "@teammind/markview-engine";
 import type { SpeakloneConfig } from "@teammind/markview-engine";
@@ -45,6 +47,8 @@ export function registerSpeakCommand(program: Command): void {
     .description("Read a Markdown file aloud via Speaklone")
     .argument("<file>", "Markdown file to read (use - for stdin)")
     .option("--section <heading>", "Read only a specific section")
+    .option("--from <lineOrText>", "Start reading from line number or text pattern")
+    .option("--to <lineOrText>", "Stop reading at line number or text pattern")
     .option("--voice <name>", "Speaklone voice (e.g. aiden, ryan)")
     .option("--instruction <text>", "Emotion/style instruction")
     .option("--temperature <float>", "Temperature 0.0–1.0")
@@ -97,7 +101,22 @@ export function registerSpeakCommand(program: Command): void {
 
       // Extract text
       let text: string;
-      if (opts["section"]) {
+      if (opts["from"]) {
+        const from = opts["from"] as string;
+        const to = opts["to"] as string | undefined;
+        const fromNum = /^\d+$/.test(from) ? parseInt(from, 10) : NaN;
+        const toNum = to && /^\d+$/.test(to) ? parseInt(to, 10) : undefined;
+
+        if (!isNaN(fromNum)) {
+          text = extractFromLine(markdown, fromNum, toNum);
+        } else {
+          text = extractFromPattern(markdown, from, toNum ?? to);
+        }
+        if (!text) {
+          console.error(chalk.red(`No text found from "${from}".`));
+          process.exit(1);
+        }
+      } else if (opts["section"]) {
         text = extractSection(markdown, opts["section"] as string);
         if (!text) {
           console.error(chalk.red(`Section "${opts["section"]}" not found.`));

@@ -29,7 +29,8 @@ export function registerRenderCommand(program: Command): void {
       }
 
       try {
-        const result = await render(markdown);
+        const basePath = file !== "-" ? path.dirname(path.resolve(file)) : undefined;
+        const result = await render(markdown, { basePath });
 
         if (globalOpts.json) {
           output(

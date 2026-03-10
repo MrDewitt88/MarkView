@@ -11,7 +11,7 @@ export async function exportHtml(
   markdown: string,
   options?: ExportOptions,
 ): Promise<string> {
-  const result = await render(markdown);
+  const result = await render(markdown, { basePath: options?.basePath });
 
   const title = result.frontmatter.title ?? "Document";
   const headerHtml = generateHeaderHtml(result.frontmatter);

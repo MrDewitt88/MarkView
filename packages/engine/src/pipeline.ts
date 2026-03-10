@@ -15,6 +15,8 @@ import { highlightCodeBlocks } from "./plugins/highlight.js";
 import { extractToc } from "./plugins/toc.js";
 import { processMermaidBlocks } from "./plugins/mermaid.js";
 import { buildStyles } from "./templates/index.js";
+import { resolveVariables } from "./plugins/variables.js";
+import { resolveIncludes } from "./plugins/includes.js";
 
 /**
  * Render Markdown to HTML with full plugin pipeline:
@@ -23,9 +25,22 @@ import { buildStyles } from "./templates/index.js";
  * Integrates: frontmatter parsing, code highlighting (shiki), TOC extraction, mermaid diagrams.
  * Includes template CSS based on frontmatter "template" field.
  */
-export async function render(markdown: string): Promise<RenderResult> {
+export async function render(
+  markdown: string,
+  options?: { basePath?: string },
+): Promise<RenderResult> {
   // 1. Parse frontmatter separately (gray-matter)
-  const { content, frontmatter } = parseFrontmatter(markdown);
+  let { content: rawContent, frontmatter } = parseFrontmatter(markdown);
+
+  // 1a. Resolve includes if present and basePath is provided
+  if (frontmatter.include?.length && options?.basePath) {
+    rawContent = await resolveIncludes(markdown, options.basePath);
+  }
+
+  // 1b. Resolve {{variables}} in content
+  const content = frontmatter.vars
+    ? resolveVariables(rawContent, frontmatter)
+    : rawContent;
 
   // 2. Build the unified pipeline
   const processor = unified()
@@ -57,11 +72,16 @@ export async function render(markdown: string): Promise<RenderResult> {
   const html = processor.stringify(hast) as string;
 
   // 6. Build template CSS (from frontmatter or default)
-  const css = buildStyles(
+  let css = buildStyles(
     frontmatter.template,
     frontmatter.font,
     frontmatter.fontSize,
   );
+
+  // 7. Append custom CSS from frontmatter style field
+  if (frontmatter.style) {
+    css += `\n/* Custom frontmatter styles */\n${frontmatter.style}`;
+  }
 
   return {
     html,

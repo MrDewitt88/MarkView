@@ -13,10 +13,11 @@ export function registerLintCommand(program: Command): void {
     .description("Lint Markdown files for issues")
     .argument("<fileOrGlob>", "Markdown file or glob pattern")
     .option("--strict", "Enable strict mode (additional checks)")
+    .option("--a11y", "Enable accessibility checks")
     .action(
       async (
         fileOrGlob: string,
-        opts: { strict?: boolean },
+        opts: { strict?: boolean; a11y?: boolean },
         cmd: Command,
       ) => {
         const globalOpts = getGlobalOptions(cmd);
@@ -41,7 +42,7 @@ export function registerLintCommand(program: Command): void {
 
         for (const file of files) {
           const markdown = await fs.readFile(file, "utf-8");
-          const result = await lint(markdown, { strict: opts.strict ?? false });
+          const result = await lint(markdown, { strict: opts.strict ?? false, a11y: opts.a11y ?? false });
           // Set the file path on the result
           const fileResult: LintResult = {
             file: path.resolve(file),

@@ -14,7 +14,7 @@ export async function exportPdf(
   markdown: string,
   options?: ExportOptions,
 ): Promise<Buffer> {
-  const result = await render(markdown);
+  const result = await render(markdown, { basePath: options?.basePath });
 
   const title = result.frontmatter.title ?? "Document";
   const css = options?.template
@@ -30,6 +30,14 @@ export async function exportPdf(
 
     const pdfOptions = buildPdfOptions(result.frontmatter, options);
     const pdfBuffer = await page.pdf(pdfOptions);
+
+    if (options?.password) {
+      throw new Error(
+        "Password-protected PDF export is not yet supported.\n" +
+        "This feature requires pdf-lib for PDF encryption.\n" +
+        "Install it with: npm install pdf-lib"
+      );
+    }
 
     return Buffer.from(pdfBuffer);
   } finally {

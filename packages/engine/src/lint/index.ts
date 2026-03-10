@@ -2,6 +2,7 @@ import matter from "gray-matter";
 import type { LintResult, LintIssue, LintOptions } from "../types.js";
 import { getAvailableTemplates } from "../templates/index.js";
 import { ensureDomShim } from "../dom-shim.js";
+import { lintA11y } from "./a11y.js";
 
 const KNOWN_FRONTMATTER_FIELDS = new Set([
   "title",
@@ -19,6 +20,10 @@ const KNOWN_FRONTMATTER_FIELDS = new Set([
   "date",
   "version",
   "tags",
+  "style",
+  "vars",
+  "include",
+  "collab",
 ]);
 
 /**
@@ -50,6 +55,11 @@ export async function lint(
   // 4. Image path checks (strict mode only)
   if (strict) {
     lintImagePaths(lines, issues);
+  }
+
+  // 5. Accessibility checks (when a11y option is enabled)
+  if (options?.a11y) {
+    lintA11y(lines, issues, options?.strict);
   }
 
   return { file: "", issues };

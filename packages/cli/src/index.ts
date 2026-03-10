@@ -7,6 +7,9 @@ import { registerSignCommand } from "./commands/sign.js";
 import { registerOpenCommand } from "./commands/open.js";
 import { registerConfigCommand } from "./commands/config.js";
 import { registerSpeakCommand } from "./commands/speak.js";
+import { registerSearchCommand } from "./commands/search.js";
+import { registerDiffCommand } from "./commands/diff.js";
+import { registerMcpCommand } from "./commands/mcp.js";
 
 const program = new Command();
 
@@ -25,5 +28,8 @@ registerSignCommand(program);
 registerOpenCommand(program);
 registerConfigCommand(program);
 registerSpeakCommand(program);
+registerSearchCommand(program);
+registerDiffCommand(program);
+registerMcpCommand(program);
 
 program.parse(process.argv);

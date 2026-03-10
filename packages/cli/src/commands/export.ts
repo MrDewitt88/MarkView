@@ -24,6 +24,9 @@ export function registerExportCommand(program: Command): void {
     .option("--sign", "Sign the exported PDF with a certificate")
     .option("--cert <path>", "Path to PKCS#12 certificate (.p12) for signing")
     .option("--cert-password <password>", "Certificate password", "")
+    .option("--password <password>", "Password to protect the exported PDF")
+    .option("--no-print", "Disable printing in the protected PDF")
+    .option("--no-copy", "Disable copying in the protected PDF")
     .action(
       async (
         fileOrGlob: string,
@@ -35,6 +38,9 @@ export function registerExportCommand(program: Command): void {
           sign?: boolean;
           cert?: string;
           certPassword?: string;
+          password?: string;
+          print?: boolean;
+          copy?: boolean;
         },
         cmd: Command,
       ) => {
@@ -55,6 +61,11 @@ export function registerExportCommand(program: Command): void {
 
         if (opts.sign && format !== "pdf") {
           console.error("Error: --sign is only supported for PDF exports.");
+          process.exit(1);
+        }
+
+        if (opts.password && format !== "pdf") {
+          console.error("Error: --password is only supported for PDF exports.");
           process.exit(1);
         }
 
@@ -93,11 +104,13 @@ export function registerExportCommand(program: Command): void {
 
           try {
             const markdown = await fs.readFile(file, "utf-8");
+            const basePath = path.dirname(file);
 
             switch (format) {
               case "html": {
                 const htmlContent = await exportHtml(markdown, {
                   template: opts.template,
+                  basePath,
                 });
                 await fs.writeFile(outPath, htmlContent, "utf-8");
                 break;
@@ -106,6 +119,8 @@ export function registerExportCommand(program: Command): void {
                 let pdfBuffer = await exportPdf(markdown, {
                   template: opts.template,
                   paperFormat: opts.paper,
+                  basePath,
+                  password: opts.password,
                 });
 
                 if (opts.sign && opts.cert) {

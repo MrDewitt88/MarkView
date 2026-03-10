@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@teammind/markview-engine": "workspace:*",
+    "@teammind/markview-mcp": "workspace:*",
     "chalk": "^5.3.0",
     "chokidar": "^4.0.0",
     "commander": "^12.1.0",

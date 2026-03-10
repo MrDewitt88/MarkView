@@ -16,6 +16,13 @@ export interface FrontmatterConfig {
   lineHeight?: string;
   toc?: boolean;
   signature?: boolean;
+  style?: string;
+  vars?: Record<string, string>;
+  include?: string[];
+  collab?: {
+    channel?: string;
+    sync?: boolean;
+  };
 }
 
 export interface TocEntry {
@@ -33,6 +40,8 @@ export interface ExportOptions {
   margins?: PdfMargins;
   headerTemplate?: string;
   footerTemplate?: string;
+  basePath?: string;
+  password?: string;
 }
 
 export interface PdfMargins {
@@ -55,6 +64,7 @@ export interface LintIssue {
 
 export interface LintOptions {
   strict?: boolean;
+  a11y?: boolean;
 }
 
 export interface SignatureInfo {

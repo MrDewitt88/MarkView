@@ -22,6 +22,27 @@ export function parseFrontmatter(markdown: string): {
   if (typeof data.toc === "boolean") frontmatter.toc = data.toc;
   if (typeof data.signature === "boolean")
     frontmatter.signature = data.signature;
+  if (typeof data.style === "string") frontmatter.style = data.style;
+  if (Array.isArray(data.include)) {
+    frontmatter.include = data.include.filter(
+      (item: unknown): item is string => typeof item === "string",
+    );
+  }
+  if (data.vars && typeof data.vars === "object" && !Array.isArray(data.vars)) {
+    const vars: Record<string, string> = {};
+    for (const [k, v] of Object.entries(data.vars as Record<string, unknown>)) {
+      vars[k] = String(v);
+    }
+    frontmatter.vars = vars;
+  }
+
+  if (data.collab && typeof data.collab === "object") {
+    const c = data.collab as Record<string, unknown>;
+    frontmatter.collab = {
+      channel: typeof c.channel === "string" ? c.channel : undefined,
+      sync: typeof c.sync === "boolean" ? c.sync : undefined,
+    };
+  }
 
   return {
     content: result.content,

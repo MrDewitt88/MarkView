@@ -10,5 +10,7 @@ export {
 export {
   extractSpeakableText,
   extractSection,
+  extractFromLine,
+  extractFromPattern,
   splitIntoChunks,
 } from "./extract.js";

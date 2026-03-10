@@ -135,6 +135,41 @@ function visitNodes(nodes: MdastNode[], lines: string[]): void {
   }
 }
 
+/**
+ * Extract speakable text starting from a line number.
+ * Optionally stop at an end line.
+ */
+export function extractFromLine(markdown: string, from: number, to?: number): string {
+  const lines = markdown.split("\n");
+  const sliced = lines.slice(Math.max(0, from - 1), to ?? lines.length).join("\n");
+  return extractSpeakableText(sliced);
+}
+
+/**
+ * Extract speakable text starting from the first occurrence of a pattern.
+ * Optionally stop at a second pattern or line number.
+ */
+export function extractFromPattern(
+  markdown: string,
+  pattern: string,
+  toPattern?: string | number,
+): string {
+  const lines = markdown.split("\n");
+  const startIdx = lines.findIndex((l) => l.includes(pattern));
+  if (startIdx === -1) return "";
+
+  let endIdx = lines.length;
+  if (typeof toPattern === "number") {
+    endIdx = toPattern;
+  } else if (typeof toPattern === "string") {
+    const found = lines.findIndex((l, i) => i > startIdx && l.includes(toPattern));
+    if (found !== -1) endIdx = found;
+  }
+
+  const sliced = lines.slice(startIdx, endIdx).join("\n");
+  return extractSpeakableText(sliced);
+}
+
 function inlineText(nodes: MdastNode[]): string {
   let result = "";
   for (const node of nodes) {

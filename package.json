@@ -10,7 +10,8 @@
     "lint": "turbo run lint",
     "release:engine": "pnpm --filter @teammind/markview-engine publish",
     "release:cli": "pnpm --filter @teammind/markview-cli publish",
-    "release:app": "pnpm --filter @teammind/markview-app electron-builder"
+    "release:app": "pnpm --filter @teammind/markview-app electron-builder",
+    "release:mcp": "pnpm --filter @teammind/markview-mcp publish"
   },
   "devDependencies": {
     "turbo": "^2.3.0",
