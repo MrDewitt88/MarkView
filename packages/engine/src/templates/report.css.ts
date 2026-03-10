@@ -8,7 +8,7 @@ const css = `/* TeamMind MarkView — Report Template */
   @top-right {
     content: counter(page) " / " counter(pages);
     font-size: 10pt;
-    color: #888;
+    color: var(--mv-text, #888);
   }
 }
 
@@ -26,8 +26,8 @@ const css = `/* TeamMind MarkView — Report Template */
   font-family: 'Georgia', 'Times New Roman', Times, serif;
   font-size: 12pt;
   line-height: 1.6;
-  color: #1a1a1a;
-  background: #fff;
+  color: var(--mv-text, #1a1a1a);
+  background: var(--mv-bg, #fff);
 }
 
 /* Title page */
@@ -45,13 +45,13 @@ const css = `/* TeamMind MarkView — Report Template */
 
 .markview-title-page .title-author {
   font-size: 1.2em;
-  color: #555;
+  color: var(--mv-text, #555);
   margin-top: 1em;
 }
 
 .markview-title-page .title-date {
   font-size: 1em;
-  color: #777;
+  color: var(--mv-text, #777);
   margin-top: 0.5em;
 }
 
@@ -63,7 +63,7 @@ const css = `/* TeamMind MarkView — Report Template */
 
 .markview-toc h2 {
   font-size: 1.5em;
-  border-bottom: 2px solid #333;
+  border-bottom: 2px solid var(--mv-border, #333);
   padding-bottom: 0.3em;
   margin-bottom: 1em;
 }
@@ -79,7 +79,7 @@ const css = `/* TeamMind MarkView — Report Template */
 }
 
 .markview-toc li a {
-  color: #333;
+  color: var(--mv-text, #333);
   text-decoration: none;
   display: flex;
   align-items: baseline;
@@ -88,7 +88,7 @@ const css = `/* TeamMind MarkView — Report Template */
 .markview-toc li a::after {
   content: '';
   flex: 1;
-  border-bottom: 1px dotted #ccc;
+  border-bottom: 1px dotted var(--mv-border, #ccc);
   margin: 0 0.5em;
 }
 
@@ -115,7 +115,7 @@ const css = `/* TeamMind MarkView — Report Template */
   font-size: 1.8em;
   margin-top: 2em;
   margin-bottom: 0.5em;
-  border-bottom: 2px solid #333;
+  border-bottom: 2px solid var(--mv-border, #333);
   padding-bottom: 0.3em;
   page-break-after: avoid;
 }
@@ -124,7 +124,7 @@ const css = `/* TeamMind MarkView — Report Template */
   font-size: 1.4em;
   margin-top: 1.6em;
   margin-bottom: 0.4em;
-  border-bottom: 1px solid #999;
+  border-bottom: 1px solid var(--mv-border, #999);
   padding-bottom: 0.2em;
   page-break-after: avoid;
 }
@@ -151,7 +151,7 @@ const css = `/* TeamMind MarkView — Report Template */
 }
 
 .markview-document a {
-  color: #0366d6;
+  color: var(--mv-accent, #0366d6);
   text-decoration: none;
 }
 
@@ -162,10 +162,10 @@ const css = `/* TeamMind MarkView — Report Template */
 
 /* Code */
 .markview-document pre {
-  background: #f6f8fa;
+  background: var(--mv-code-bg, #f6f8fa);
   padding: 1rem;
   border-radius: 4px;
-  border: 1px solid #e1e4e8;
+  border: 1px solid var(--mv-border, #e1e4e8);
   overflow-x: auto;
   font-size: 0.85em;
   line-height: 1.45;
@@ -178,18 +178,18 @@ const css = `/* TeamMind MarkView — Report Template */
 }
 
 .markview-document :not(pre) > code {
-  background: #f0f0f0;
+  background: var(--mv-code-bg, #f0f0f0);
   padding: 0.15em 0.35em;
   border-radius: 3px;
 }
 
 /* Blockquotes */
 .markview-document blockquote {
-  border-left: 3px solid #333;
+  border-left: 3px solid var(--mv-border, #333);
   margin: 1em 0;
   padding: 0.5em 1em;
-  background: #f9f9f9;
-  color: #444;
+  background: var(--mv-blockquote-bg, #f9f9f9);
+  color: var(--mv-text, #444);
   font-style: italic;
 }
 
@@ -203,13 +203,13 @@ const css = `/* TeamMind MarkView — Report Template */
 
 .markview-document th,
 .markview-document td {
-  border: 1px solid #999;
+  border: 1px solid var(--mv-border, #999);
   padding: 0.5em 0.7em;
   text-align: left;
 }
 
 .markview-document th {
-  background: #eee;
+  background: var(--mv-table-header, #eee);
   font-weight: bold;
 }
 
@@ -227,7 +227,7 @@ const css = `/* TeamMind MarkView — Report Template */
 /* Horizontal rule */
 .markview-document hr {
   border: none;
-  border-top: 1px solid #999;
+  border-top: 1px solid var(--mv-border, #999);
   margin: 2em 0;
 }
 
@@ -242,16 +242,16 @@ const css = `/* TeamMind MarkView — Report Template */
 .markview-header {
   position: running(header);
   font-size: 9pt;
-  color: #888;
-  border-bottom: 0.5pt solid #ccc;
+  color: var(--mv-text, #888);
+  border-bottom: 0.5pt solid var(--mv-border, #ccc);
   padding-bottom: 0.3em;
 }
 
 .markview-footer {
   position: running(footer);
   font-size: 9pt;
-  color: #888;
-  border-top: 0.5pt solid #ccc;
+  color: var(--mv-text, #888);
+  border-top: 0.5pt solid var(--mv-border, #ccc);
   padding-top: 0.3em;
   text-align: center;
 }

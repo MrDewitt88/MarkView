@@ -1,6 +1,7 @@
 import { render, replaceTemplateVariables } from "../pipeline.js";
 import type { ExportOptions, FrontmatterConfig } from "../types.js";
 import { buildStyles } from "../templates/index.js";
+import { launchBrowser } from "./browser.js";
 
 /**
  * Export Markdown to PDF using Playwright's headless Chromium.
@@ -22,10 +23,7 @@ export async function exportPdf(
 
   const fullHtml = buildPdfHtml(result.html, css, title);
 
-  // Dynamically import playwright to keep it as an optional dependency
-  const { chromium } = await import("playwright");
-
-  const browser = await chromium.launch({ headless: true });
+  const browser = await launchBrowser();
   try {
     const page = await browser.newPage();
     await page.setContent(fullHtml, { waitUntil: "networkidle" });

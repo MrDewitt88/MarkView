@@ -1,4 +1,4 @@
-import { ipcMain, dialog, type BrowserWindow } from "electron";
+import { ipcMain, dialog, BrowserWindow } from "electron";
 import {
   openFile,
   getRecentFiles,
@@ -303,7 +303,7 @@ export function registerIpcHandlers(window: BrowserWindow): void {
     return { success: false, error: "Cancelled" };
   });
 
-  // Export to PNG — render each page as a separate PNG via engine (Playwright)
+  // Export to PNG — render HTML in a hidden BrowserWindow and use capturePage()
   ipcMain.handle("file:export-png", async (_event, markdown: string) => {
     const result = await dialog.showSaveDialog(window, {
       filters: [{ name: "PNG Image", extensions: ["png"] }],
@@ -311,26 +311,38 @@ export function registerIpcHandlers(window: BrowserWindow): void {
     });
 
     if (!result.canceled && result.filePath) {
+      let hiddenWin: BrowserWindow | null = null;
       try {
-        const { exportPng } = await import("@teammind/markview-engine");
+        const { exportHtml } = await import("@teammind/markview-engine");
         const { writeFile } = await import("fs/promises");
-        const { dirname, basename, extname, join } = await import("path");
 
-        const pngPages = await exportPng(markdown);
-        const dir = dirname(result.filePath);
-        const name = basename(result.filePath, extname(result.filePath));
+        const htmlContent = await exportHtml(markdown);
 
-        if (pngPages.length === 1) {
-          await writeFile(result.filePath, pngPages[0]!);
-        } else {
-          for (let i = 0; i < pngPages.length; i++) {
-            const pagePath = join(dir, `${name}-${i + 1}.png`);
-            await writeFile(pagePath, pngPages[i]!);
-          }
-        }
+        hiddenWin = new BrowserWindow({
+          show: false,
+          width: 794,
+          height: 1123,
+          webPreferences: { offscreen: true },
+        });
+
+        await hiddenWin.loadURL(
+          `data:text/html;charset=utf-8,${encodeURIComponent(htmlContent)}`
+        );
+
+        // Wait for content to render
+        await new Promise((r) => setTimeout(r, 500));
+
+        const image = await hiddenWin.webContents.capturePage();
+        hiddenWin.close();
+        hiddenWin = null;
+
+        await writeFile(result.filePath, image.toPNG());
 
         return { success: true, path: result.filePath };
       } catch (err) {
+        if (hiddenWin) {
+          hiddenWin.close();
+        }
         const message = err instanceof Error ? err.message : "PNG export failed";
         return { success: false, error: message };
       }

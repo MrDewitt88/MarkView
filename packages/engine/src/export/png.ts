@@ -1,5 +1,6 @@
 import type { ExportOptions } from "../types.js";
 import { exportHtml } from "./html.js";
+import { launchBrowser } from "./browser.js";
 
 /**
  * Export Markdown to PNG images — one per A4 page.
@@ -11,9 +12,7 @@ export async function exportPng(
   options?: ExportOptions,
 ): Promise<Buffer[]> {
   const htmlContent = await exportHtml(markdown, options);
-  const { chromium } = await import("playwright");
-
-  const browser = await chromium.launch({ headless: true });
+  const browser = await launchBrowser();
   try {
     const page = await browser.newPage();
     await page.setContent(htmlContent, { waitUntil: "networkidle" });

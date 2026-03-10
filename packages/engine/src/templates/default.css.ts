@@ -7,8 +7,8 @@ const css = `/* TeamMind MarkView — Default Template */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
   line-height: 1.6;
-  color: #1a1a1a;
-  background: #fff;
+  color: var(--mv-text, #1a1a1a);
+  background: var(--mv-bg, #fff);
 }
 
 /* Headings */
@@ -16,7 +16,7 @@ const css = `/* TeamMind MarkView — Default Template */
   font-size: 2em;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--mv-border, #e5e5e5);
   padding-bottom: 0.3em;
 }
 
@@ -24,7 +24,7 @@ const css = `/* TeamMind MarkView — Default Template */
   font-size: 1.5em;
   margin-top: 1.4em;
   margin-bottom: 0.4em;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--mv-border, #eee);
   padding-bottom: 0.25em;
 }
 
@@ -46,7 +46,7 @@ const css = `/* TeamMind MarkView — Default Template */
 }
 
 .markview-document a {
-  color: #0366d6;
+  color: var(--mv-accent, #0366d6);
   text-decoration: none;
 }
 
@@ -65,7 +65,7 @@ const css = `/* TeamMind MarkView — Default Template */
 
 /* Code blocks — rounded */
 .markview-document pre {
-  background: #f6f8fa;
+  background: var(--mv-code-bg, #f6f8fa);
   padding: 1rem;
   border-radius: 8px;
   overflow-x: auto;
@@ -79,19 +79,19 @@ const css = `/* TeamMind MarkView — Default Template */
 }
 
 .markview-document :not(pre) > code {
-  background: #f0f0f0;
+  background: var(--mv-code-bg, #f0f0f0);
   padding: 0.2em 0.4em;
   border-radius: 4px;
 }
 
 /* Blockquotes */
 .markview-document blockquote {
-  border-left: 4px solid #0366d6;
+  border-left: 4px solid var(--mv-accent, #0366d6);
   margin: 1em 0;
   padding: 0.5em 1em;
-  background: #f8f9fa;
+  background: var(--mv-blockquote-bg, #f8f9fa);
   border-radius: 0 4px 4px 0;
-  color: #555;
+  color: var(--mv-text, #555);
 }
 
 .markview-document blockquote p {
@@ -109,18 +109,18 @@ const css = `/* TeamMind MarkView — Default Template */
 
 .markview-document th,
 .markview-document td {
-  border: 1px solid #dfe2e5;
+  border: 1px solid var(--mv-border, #dfe2e5);
   padding: 0.6em 0.8em;
   text-align: left;
 }
 
 .markview-document th {
-  background: #f6f8fa;
+  background: var(--mv-table-header, #f6f8fa);
   font-weight: 600;
 }
 
 .markview-document tr:nth-child(even) {
-  background: #fafbfc;
+  background: var(--mv-table-header, #fafbfc);
 }
 
 /* Lists */
@@ -137,7 +137,7 @@ const css = `/* TeamMind MarkView — Default Template */
 /* Horizontal rule */
 .markview-document hr {
   border: none;
-  border-top: 2px solid #e5e5e5;
+  border-top: 2px solid var(--mv-border, #e5e5e5);
   margin: 2em 0;
 }
 
@@ -151,17 +151,17 @@ const css = `/* TeamMind MarkView — Default Template */
 .markview-header,
 .markview-footer {
   font-size: 0.85em;
-  color: #666;
+  color: var(--mv-text, #666);
   padding: 0.5em 0;
 }
 
 .markview-header {
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--mv-border, #e5e5e5);
   margin-bottom: 1.5em;
 }
 
 .markview-footer {
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid var(--mv-border, #e5e5e5);
   margin-top: 1.5em;
   text-align: center;
 }

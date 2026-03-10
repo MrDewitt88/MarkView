@@ -40,12 +40,12 @@ export default defineConfig({
         },
         // Node-only deps pulled in transitively by @teammind/markview-engine
         // must not be bundled into the browser renderer.
-        external: ["jsdom", "playwright", "playwright-core"],
+        external: ["linkedom", "playwright", "playwright-core"],
       },
     },
     plugins: [react()],
     optimizeDeps: {
-      exclude: ["jsdom", "playwright", "playwright-core"],
+      exclude: ["linkedom", "playwright", "playwright-core"],
     },
     resolve: {
       alias: {

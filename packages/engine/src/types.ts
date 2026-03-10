@@ -26,7 +26,7 @@ export interface TocEntry {
 
 export interface ExportOptions {
   template?: string;
-  format?: "pdf" | "html" | "pptx";
+  format?: "pdf" | "html" | "png";
   outPath?: string;
   paperFormat?: string;
   landscape?: boolean;

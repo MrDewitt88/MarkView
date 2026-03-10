@@ -7,8 +7,8 @@ const css = `/* TeamMind MarkView — Minimal Template */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 14px;
   line-height: 1.5;
-  color: #000;
-  background: #fff;
+  color: var(--mv-text, #000);
+  background: var(--mv-bg, #fff);
 }
 
 /* Headings */
@@ -46,7 +46,7 @@ const css = `/* TeamMind MarkView — Minimal Template */
 }
 
 .markview-document a {
-  color: #000;
+  color: var(--mv-accent, #000);
   text-decoration: underline;
 }
 
@@ -57,9 +57,9 @@ const css = `/* TeamMind MarkView — Minimal Template */
 
 /* Code */
 .markview-document pre {
-  background: #f5f5f5;
+  background: var(--mv-code-bg, #f5f5f5);
   padding: 0.8rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--mv-border, #ddd);
   overflow-x: auto;
   font-size: 0.85em;
   line-height: 1.4;
@@ -71,17 +71,17 @@ const css = `/* TeamMind MarkView — Minimal Template */
 }
 
 .markview-document :not(pre) > code {
-  background: #f5f5f5;
+  background: var(--mv-code-bg, #f5f5f5);
   padding: 0.1em 0.3em;
-  border: 1px solid #ddd;
+  border: 1px solid var(--mv-border, #ddd);
 }
 
 /* Blockquotes */
 .markview-document blockquote {
-  border-left: 2px solid #000;
+  border-left: 2px solid var(--mv-accent, #000);
   margin: 0.8em 0;
   padding: 0.3em 0.8em;
-  color: #333;
+  color: var(--mv-text, #333);
 }
 
 /* Tables */
@@ -93,7 +93,7 @@ const css = `/* TeamMind MarkView — Minimal Template */
 
 .markview-document th,
 .markview-document td {
-  border: 1px solid #000;
+  border: 1px solid var(--mv-border, #000);
   padding: 0.4em 0.6em;
   text-align: left;
 }
@@ -116,7 +116,7 @@ const css = `/* TeamMind MarkView — Minimal Template */
 /* Horizontal rule */
 .markview-document hr {
   border: none;
-  border-top: 1px solid #000;
+  border-top: 1px solid var(--mv-border, #000);
   margin: 1.5em 0;
 }
 
@@ -130,17 +130,17 @@ const css = `/* TeamMind MarkView — Minimal Template */
 .markview-header,
 .markview-footer {
   font-size: 0.8em;
-  color: #333;
+  color: var(--mv-text, #333);
   padding: 0.3em 0;
 }
 
 .markview-header {
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid var(--mv-border, #000);
   margin-bottom: 1em;
 }
 
 .markview-footer {
-  border-top: 1px solid #000;
+  border-top: 1px solid var(--mv-border, #000);
   margin-top: 1em;
   text-align: center;
 }

@@ -39,6 +39,7 @@ const TEMPLATE_FRONTMATTER: Record<string, string> = {
 };
 
 let currentWatcher: FSWatcher | null = null;
+let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
 /**
  * Stop watching the current file.
@@ -93,24 +94,30 @@ export function watchFile(filePath: string, window: BrowserWindow): void {
 
   currentWatcher = watch(filePath, (eventType) => {
     if (eventType === "change") {
-      readFile(filePath, "utf-8", (err, content) => {
-        if (err) {
-          console.error(`Failed to re-read file: ${filePath}`, err);
-          return;
-        }
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
+      debounceTimer = setTimeout(() => {
+        debounceTimer = null;
+        readFile(filePath, "utf-8", (err, content) => {
+          if (err) {
+            console.error(`Failed to re-read file: ${filePath}`, err);
+            return;
+          }
 
-        if (window.isDestroyed()) {
-          currentWatcher?.close();
-          currentWatcher = null;
-          return;
-        }
+          if (window.isDestroyed()) {
+            currentWatcher?.close();
+            currentWatcher = null;
+            return;
+          }
 
-        window.webContents.send("file:changed", {
-          path: filePath,
-          name: basename(filePath),
-          content,
+          window.webContents.send("file:changed", {
+            path: filePath,
+            name: basename(filePath),
+            content,
+          });
         });
-      });
+      }, 150);
     }
   });
 }

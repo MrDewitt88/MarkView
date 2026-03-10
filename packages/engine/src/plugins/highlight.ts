@@ -26,7 +26,8 @@ export async function highlightCode(code: string, lang: string): Promise<string>
       await highlighter.loadLanguage(lang as never);
     } catch {
       // Language not available, return escaped code
-      return `<pre><code class="language-${escapeHtml(lang)}">${escapeHtml(code)}</code></pre>`;
+      const escapedCode = escapeHtml(code);
+      return `<pre class="shiki" style="background-color:#24292e"><code><span class="line">${escapedCode}</span></code></pre>`;
     }
   }
 
