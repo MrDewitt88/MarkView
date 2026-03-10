@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import type { TocEntry } from "@markview/engine";
+import type { TocEntry } from "@teammind/markview-engine";
 
 interface SidebarProps {
   toc: TocEntry[];

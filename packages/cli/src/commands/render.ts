@@ -1,8 +1,8 @@
 import { Command } from "commander";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { render } from "@markview/engine";
-import { exportPdf } from "@markview/engine/pdf";
+import { render } from "@teammind/markview-engine";
+import { exportPdf } from "@teammind/markview-engine/pdf";
 import { getGlobalOptions, log, output } from "../utils/output.js";
 
 export function registerRenderCommand(program: Command): void {

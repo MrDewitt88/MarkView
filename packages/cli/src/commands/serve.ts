@@ -6,7 +6,7 @@ import express from "express";
 import { WebSocketServer } from "ws";
 import { watch } from "chokidar";
 import chalk from "chalk";
-import { render } from "@markview/engine";
+import { render } from "@teammind/markview-engine";
 import { getGlobalOptions, log } from "../utils/output.js";
 
 const LIVE_RELOAD_SCRIPT = `

@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useEffect } from "react";
-import type { FrontmatterConfig } from "@markview/engine";
+import type { FrontmatterConfig } from "@teammind/markview-engine";
 
 interface TTSConfig {
   endpoint?: string;

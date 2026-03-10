@@ -38,7 +38,7 @@ export default defineConfig({
         input: {
           index: resolve(__dirname, "src/renderer/index.html"),
         },
-        // Node-only deps pulled in transitively by @markview/engine
+        // Node-only deps pulled in transitively by @teammind/markview-engine
         // must not be bundled into the browser renderer.
         external: ["jsdom", "playwright", "playwright-core"],
       },

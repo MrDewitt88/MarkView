@@ -1,4 +1,4 @@
-import { Menu, app, shell, type BrowserWindow } from "electron";
+import { Menu, app, shell, dialog, type BrowserWindow } from "electron";
 import { installCli, uninstallCli, isCliInstalled } from "./install-cli.js";
 
 export function createAppMenu(getWindow: () => BrowserWindow | null): void {
@@ -11,7 +11,17 @@ export function createAppMenu(getWindow: () => BrowserWindow | null): void {
           {
             label: app.name,
             submenu: [
-              { role: "about" as const },
+              {
+                label: "About TeamMind MarkView",
+                click: () => {
+                  dialog.showMessageBox({
+                    type: "info",
+                    title: "About TeamMind MarkView",
+                    message: "TeamMind MarkView",
+                    detail: `Version ${app.getVersion()}\n\nThe missing OS for Markdown — by TeamMind\nhttps://team-mind.eu\n\n© 2026 Digitale Projekte RF GmbH`,
+                  });
+                },
+              },
               { type: "separator" as const },
               {
                 label: isCliInstalled()
@@ -138,13 +148,13 @@ export function createAppMenu(getWindow: () => BrowserWindow | null): void {
         {
           label: "Documentation",
           click: () =>
-            shell.openExternal("https://github.com/markview/markview"),
+            shell.openExternal("https://github.com/MrDewitt88/MarkView"),
         },
         {
           label: "Report Issue…",
           click: () =>
             shell.openExternal(
-              "https://github.com/markview/markview/issues/new",
+              "https://github.com/MrDewitt88/MarkView/issues/new",
             ),
         },
       ],

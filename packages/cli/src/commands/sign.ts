@@ -2,7 +2,7 @@ import { Command } from "commander";
 import path from "node:path";
 import fs from "node:fs/promises";
 import chalk from "chalk";
-import { signPdf } from "@markview/engine";
+import { signPdf } from "@teammind/markview-engine";
 import { getGlobalOptions, log, output } from "../utils/output.js";
 
 export function registerSignCommand(program: Command): void {

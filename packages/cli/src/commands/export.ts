@@ -2,8 +2,8 @@ import { Command } from "commander";
 import path from "node:path";
 import fs from "node:fs/promises";
 import chalk from "chalk";
-import { exportHtml, signPdf } from "@markview/engine";
-import { exportPdf } from "@markview/engine/pdf";
+import { exportHtml, signPdf } from "@teammind/markview-engine";
+import { exportPdf } from "@teammind/markview-engine/pdf";
 import { resolveFiles } from "../utils/glob.js";
 import { getGlobalOptions, log, output } from "../utils/output.js";
 

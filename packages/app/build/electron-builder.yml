@@ -1,6 +1,6 @@
-appId: com.markview.app
-productName: MarkView
-copyright: Copyright (c) 2026 MarkView Contributors
+appId: eu.team-mind.markview
+productName: TeamMind MarkView
+copyright: Copyright (c) 2026 Digitale Projekte RF GmbH
 
 directories:
   buildResources: resources
@@ -95,4 +95,6 @@ fileAssociations:
 
 publish:
   provider: github
+  owner: MrDewitt88
+  repo: MarkView
   releaseType: release

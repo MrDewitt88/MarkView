@@ -2,8 +2,8 @@ import { Command } from "commander";
 import path from "node:path";
 import fs from "node:fs/promises";
 import chalk from "chalk";
-import { lint } from "@markview/engine";
-import type { LintResult } from "@markview/engine";
+import { lint } from "@teammind/markview-engine";
+import type { LintResult } from "@teammind/markview-engine";
 import { resolveFiles } from "../utils/glob.js";
 import { getGlobalOptions, log, output } from "../utils/output.js";
 

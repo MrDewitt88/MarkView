@@ -9,8 +9,8 @@ import {
   extractSpeakableText,
   extractSection,
   splitIntoChunks,
-} from "@markview/engine";
-import type { SpeakloneConfig } from "@markview/engine";
+} from "@teammind/markview-engine";
+import type { SpeakloneConfig } from "@teammind/markview-engine";
 import { loadConfig } from "../utils/config.js";
 
 function resolveConfig(opts: Record<string, string | undefined>): SpeakloneConfig {
@@ -19,7 +19,7 @@ function resolveConfig(opts: Record<string, string | undefined>): SpeakloneConfi
 
   const token = opts["token"] ?? process.env["SPEAKLONE_TOKEN"] ?? tts.token;
   if (!token) {
-    console.error(chalk.red("No Speaklone token found.\n"));
+    console.error(chalk.red("No Speaklone token configured.\n"));
     console.error(`  Quick setup:  ${chalk.bold("markview config setup tts")}`);
     console.error(`  Manual:       ${chalk.bold('markview config set tts.token YOUR_TOKEN')}`);
     console.error(`\n  Find your token: Speaklone → Settings → Local API → Copy Token`);

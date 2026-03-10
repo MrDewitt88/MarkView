@@ -19,7 +19,7 @@ export async function installCli(): Promise<void> {
       type: "info",
       title: "Install CLI",
       message:
-        "On Windows the CLI is available after adding the install directory to your PATH.\nAlternatively, install globally via: npm install -g @markview/cli",
+        "On Windows the CLI is available after adding the install directory to your PATH.\nAlternatively, install globally via: npm install -g @teammind/markview-cli",
     });
     return;
   }
@@ -110,7 +110,7 @@ function getWrapperPath(): string {
 function getCliEntryPoint(): string {
   // The CLI package is bundled within the app's node_modules
   if (app.isPackaged) {
-    return join(process.resourcesPath, "app.asar", "node_modules", "@markview", "cli", "dist", "index.js");
+    return join(process.resourcesPath, "app.asar", "node_modules", "@teammind", "markview-cli", "dist", "index.js");
   }
   // Dev mode: use the workspace package directly
   return join(app.getAppPath(), "..", "..", "cli", "dist", "index.js");
@@ -121,7 +121,7 @@ function createWrapper(wrapperPath: string): void {
   const cliEntry = getCliEntryPoint();
 
   const script = `#!/bin/sh
-# MarkView CLI — installed by MarkView.app
+# TeamMind MarkView CLI — installed by TeamMind MarkView.app
 # This wrapper runs the bundled CLI using the Electron Node.js runtime.
 ELECTRON_RUN_AS_NODE=1 exec "${electronPath}" "${cliEntry}" "$@"
 `;

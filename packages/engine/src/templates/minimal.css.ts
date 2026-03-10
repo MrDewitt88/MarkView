@@ -1,4 +1,4 @@
-const css = `/* MarkView Minimal Template — Black/white, reduced, ideal for print */
+const css = `/* TeamMind MarkView — Minimal Template */
 
 .markview-document {
   max-width: 800px;

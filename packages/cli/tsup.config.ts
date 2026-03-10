@@ -8,5 +8,5 @@ export default defineConfig({
   banner: {
     js: "#!/usr/bin/env node",
   },
-  external: ["@markview/engine"],
+  external: ["@teammind/markview-engine"],
 });

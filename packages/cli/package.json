@@ -1,5 +1,5 @@
 {
-  "name": "@markview/cli",
+  "name": "@teammind/markview-cli",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -15,7 +15,7 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
-    "@markview/engine": "workspace:*",
+    "@teammind/markview-engine": "workspace:*",
     "chalk": "^5.3.0",
     "chokidar": "^4.0.0",
     "commander": "^12.1.0",

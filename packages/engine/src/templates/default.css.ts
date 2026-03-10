@@ -1,4 +1,4 @@
-const css = `/* MarkView Default Template — Clean, readable typography */
+const css = `/* TeamMind MarkView — Default Template */
 
 .markview-document {
   max-width: 800px;

@@ -42,7 +42,7 @@ jobs:
         run: pnpm build
 
       - name: Build Electron app
-        run: pnpm --filter @markview/app electron-builder --${{ matrix.platform }}
+        run: pnpm --filter @teammind/markview-app electron-builder --${{ matrix.platform }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

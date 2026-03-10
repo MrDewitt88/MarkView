@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { render } from "@markview/engine";
-import type { FrontmatterConfig, TocEntry } from "@markview/engine";
+import { render } from "@teammind/markview-engine";
+import type { FrontmatterConfig, TocEntry } from "@teammind/markview-engine";
 
 interface UseMarkdownResult {
   html: string;
@@ -11,7 +11,7 @@ interface UseMarkdownResult {
 }
 
 /**
- * Hook that wraps @markview/engine's render() function.
+ * Hook that wraps @teammind/markview-engine's render() function.
  * Memoized: only re-renders when the markdown string changes.
  */
 export function useMarkdown(markdown: string | null): UseMarkdownResult {

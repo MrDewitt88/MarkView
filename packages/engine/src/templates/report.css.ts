@@ -1,4 +1,4 @@
-const css = `/* MarkView Report Template — Professional, paged, with header/footer */
+const css = `/* TeamMind MarkView — Report Template */
 
 @page {
   size: A4;

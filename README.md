@@ -1,37 +1,46 @@
 <p align="center">
-  <img src="packages/app/src/renderer/assets/logo.png" alt="MarkView" width="128" height="128" />
+  <img src="packages/app/src/renderer/assets/logo.png" alt="TeamMind MarkView" width="128" height="128" />
 </p>
 
-<h1 align="center">MarkView</h1>
+<h1 align="center">TeamMind MarkView</h1>
 
 <p align="center">
-  Markdown rendering, export, and preview toolkit with text-to-speech.
+  The missing OS for Markdown — in the age of AI agents.
 </p>
 
 ---
 
-A monorepo containing three packages: a rendering engine, a CLI tool, and an Electron desktop app.
+Part of the [TeamMind](https://team-mind.eu) ecosystem by Digitale Projekte RF GmbH.
 
 ## Packages
 
-| Package | Description |
-|---|---|
-| [@markview/engine](./packages/engine) | Core rendering engine — Markdown-to-HTML pipeline, PDF/HTML export, linting, TTS text extraction |
-| [@markview/cli](./packages/cli) | CLI for rendering, exporting, serving, linting, and reading aloud |
-| [MarkView App](./packages/app) | Electron desktop app with live preview, editor, and Speaklone TTS |
+| Package | npm | Description |
+|---------|-----|-------------|
+| @teammind/markview-engine | Engine | Headless render engine |
+| @teammind/markview-cli | CLI | Command-line interface |
+| @teammind/markview-app | App | Electron GUI (Viewer + Builder) |
+
+## Quick Start
+
+```bash
+npm install -g @teammind/markview-cli
+markview render README.md
+markview serve README.md
+markview export README.md --format pdf
+```
 
 ## Installation
 
 ### Engine (library)
 
 ```bash
-npm install @markview/engine
+npm install @teammind/markview-engine
 ```
 
 ### CLI
 
 ```bash
-npm install -g @markview/cli
+npm install -g @teammind/markview-cli
 ```
 
 ### Desktop App
@@ -44,9 +53,7 @@ pnpm build
 cd packages/app && npx electron-builder --mac dmg --config build/electron-builder.yml
 ```
 
-## Quick Start
-
-### CLI
+## CLI Usage
 
 ```bash
 # Render Markdown to HTML
@@ -68,15 +75,15 @@ markview speak doc.md --voice aiden
 markview config setup
 ```
 
-### Engine (programmatic)
+## Engine (programmatic)
 
 ```typescript
-import { render } from "@markview/engine";
+import { render } from "@teammind/markview-engine";
 
 const { html, frontmatter, toc } = await render("# Hello\n\nSome **bold** text.");
 ```
 
-### Desktop App
+## Desktop App
 
 Open any `.md` file to get a rendered preview with:
 
@@ -143,8 +150,8 @@ pnpm build
 
 ```
 packages/
-  engine/     # @markview/engine — rendering, export, TTS extraction
-  cli/        # @markview/cli — command-line interface
+  engine/     # @teammind/markview-engine — rendering, export, TTS extraction
+  cli/        # @teammind/markview-cli — command-line interface
   app/        # Electron desktop application
 ```
 

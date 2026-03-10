@@ -12,7 +12,7 @@ const program = new Command();
 
 program
   .name("markview")
-  .description("MarkView — Markdown rendering, export, and preview CLI")
+  .description("TeamMind MarkView — Markdown rendering, export, and preview CLI")
   .version("0.1.0")
   .option("--json", "Output results as JSON")
   .option("--quiet", "Suppress non-essential output");

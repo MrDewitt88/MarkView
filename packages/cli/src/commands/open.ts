@@ -13,16 +13,16 @@ export function registerOpenCommand(program: Command): void {
       const globalOpts = getGlobalOptions(cmd);
       const filePath = path.resolve(file);
 
-      // Try to launch @markview/app if installed
+      // Try to launch @teammind/markview-app if installed
       try {
         const appPath = await resolveApp();
-        log(chalk.blue(`Opening ${filePath} in MarkView viewer...`), globalOpts);
+        log(chalk.blue(`Opening ${filePath} in TeamMind MarkView...`), globalOpts);
         exec(`"${appPath}" "${filePath}"`);
       } catch {
         // Fallback: start serve + open browser
         log(
           chalk.yellow(
-            "@markview/app is not installed. Falling back to serve mode...",
+            "@teammind/markview-app is not installed. Falling back to serve mode...",
           ),
           globalOpts,
         );
@@ -40,12 +40,12 @@ export function registerOpenCommand(program: Command): void {
 
       try {
         const appPath = await resolveApp();
-        log(chalk.blue(`Opening ${filePath} in MarkView editor...`), globalOpts);
+        log(chalk.blue(`Opening ${filePath} in TeamMind MarkView editor...`), globalOpts);
         exec(`"${appPath}" --edit "${filePath}"`);
       } catch {
         log(
           chalk.yellow(
-            "@markview/app is not installed. Falling back to serve mode...",
+            "@teammind/markview-app is not installed. Falling back to serve mode...",
           ),
           globalOpts,
         );
@@ -57,7 +57,7 @@ export function registerOpenCommand(program: Command): void {
 async function resolveApp(): Promise<string> {
   // Try to find the electron app binary
   // This will be implemented properly in Phase 3
-  throw new Error("@markview/app not found");
+  throw new Error("@teammind/markview-app not found");
 }
 
 async function fallbackServe(filePath: string): Promise<void> {
@@ -77,7 +77,7 @@ async function fallbackServe(filePath: string): Promise<void> {
 
   // Import express dynamically to set up a quick server
   const express = await import("express");
-  const { render } = await import("@markview/engine");
+  const { render } = await import("@teammind/markview-engine");
   const fs = await import("node:fs/promises");
   const { createServer } = await import("node:http");
 
@@ -91,7 +91,7 @@ async function fallbackServe(filePath: string): Promise<void> {
       const markdown = await fs.readFile(filePath, "utf-8");
       const result = await render(markdown);
       res.type("html").send(`<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>MarkView</title>
+<html><head><meta charset="UTF-8"><title>TeamMind MarkView</title>
 <style>body{font-family:-apple-system,sans-serif;max-width:800px;margin:0 auto;padding:2rem;line-height:1.6}</style>
 </head><body>${result.html}</body></html>`);
     } catch (err) {
@@ -100,7 +100,7 @@ async function fallbackServe(filePath: string): Promise<void> {
   });
 
   server.listen(port, () => {
-    console.error(`MarkView running at http://localhost:${port}`);
+    console.error(`TeamMind MarkView running at http://localhost:${port}`);
     openUrl(`http://localhost:${port}`);
   });
 }

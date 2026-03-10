@@ -10,8 +10,8 @@ import {
   getConfigPath,
   maskSecret,
 } from "../utils/config.js";
-import { isAvailable, speak } from "@markview/engine";
-import type { SpeakloneConfig } from "@markview/engine";
+import { isAvailable, speak } from "@teammind/markview-engine";
+import type { SpeakloneConfig } from "@teammind/markview-engine";
 
 const SECRET_KEYS = ["tts.token"];
 

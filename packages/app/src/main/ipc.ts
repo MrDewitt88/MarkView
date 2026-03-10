@@ -193,7 +193,7 @@ export function registerIpcHandlers(window: BrowserWindow): void {
   });
 
   // TTS: speak text via Speaklone
-  // Inline fetch to avoid importing @markview/engine (which pulls in unified/remark, unavailable in asar)
+  // Inline fetch to avoid importing @teammind/markview-engine (which pulls in unified/remark, unavailable in asar)
   ipcMain.handle("tts:speak", async (_event, text: string, config: {
     endpoint?: string; token?: string; voice?: string;
     instruction?: string; temperature?: number;
@@ -290,7 +290,7 @@ export function registerIpcHandlers(window: BrowserWindow): void {
 
     if (!result.canceled && result.filePath) {
       try {
-        const { exportHtml } = await import("@markview/engine");
+        const { exportHtml } = await import("@teammind/markview-engine");
         const htmlContent = await exportHtml(markdown);
         const { writeFile } = await import("fs/promises");
         await writeFile(result.filePath, htmlContent, "utf-8");
@@ -312,7 +312,7 @@ export function registerIpcHandlers(window: BrowserWindow): void {
 
     if (!result.canceled && result.filePath) {
       try {
-        const { exportPng } = await import("@markview/engine");
+        const { exportPng } = await import("@teammind/markview-engine");
         const { writeFile } = await import("fs/promises");
         const { dirname, basename, extname, join } = await import("path");
 

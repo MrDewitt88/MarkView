@@ -37,14 +37,14 @@ jobs:
       - name: Run tests
         run: pnpm test
 
-      - name: Publish @markview/engine
+      - name: Publish @teammind/markview-engine
         if: contains(github.ref, '-engine')
-        run: pnpm --filter @markview/engine publish --no-git-checks --access public
+        run: pnpm --filter @teammind/markview-engine publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish @markview/cli
+      - name: Publish @teammind/markview-cli
         if: contains(github.ref, '-cli')
-        run: pnpm --filter @markview/cli publish --no-git-checks --access public
+        run: pnpm --filter @teammind/markview-cli publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

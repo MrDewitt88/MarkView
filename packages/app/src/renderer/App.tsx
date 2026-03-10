@@ -212,8 +212,8 @@ export function App(): React.JSX.Element {
             )
           ) : (
             <div className="empty-state">
-              <img src={logoUrl} alt="MarkView" className="empty-state-logo" />
-              <h2>Welcome to MarkView</h2>
+              <img src={logoUrl} alt="TeamMind MarkView" className="empty-state-logo" />
+              <h2>Welcome to TeamMind MarkView</h2>
               <p>Open a Markdown file to get started.</p>
               <button className="open-button" onClick={handleOpenFile}>
                 Open File
@@ -223,7 +223,7 @@ export function App(): React.JSX.Element {
               </p>
               <div className="cli-info">
                 <h3>CLI Usage</h3>
-                <p>MarkView is also available as a command-line tool:</p>
+                <p>Also available as a command-line tool:</p>
                 <pre className="cli-commands">
 {`markview render doc.md          # Render to HTML
 markview render doc.md -o out.pdf # Export as PDF
