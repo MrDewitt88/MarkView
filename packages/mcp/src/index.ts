@@ -10,6 +10,7 @@ import {
   exportEmail,
   lint,
   extractSpeakableText,
+  extractTocFromMarkdown,
   speak,
   isAvailable,
   diffMarkdown,
@@ -178,9 +179,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case "get_toc": {
-        const result = await render(args.markdown as string);
+        const toc = extractTocFromMarkdown(args.markdown as string);
         return {
-          content: [{ type: "text", text: JSON.stringify(result.toc, null, 2) }],
+          content: [{ type: "text", text: JSON.stringify(toc, null, 2) }],
         };
       }
 

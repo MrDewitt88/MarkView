@@ -31,6 +31,40 @@ export function extractToc(tree: Root): TocEntry[] {
   return toc;
 }
 
+/**
+ * Lightweight TOC extraction directly from markdown text.
+ * Does not require the full render pipeline — useful for MCP/CLI.
+ */
+export function extractTocFromMarkdown(markdown: string): TocEntry[] {
+  const lines = markdown.split("\n");
+  const toc: TocEntry[] = [];
+
+  let inCodeBlock = false;
+  let inFrontmatter = lines[0]?.trim() === "---";
+
+  for (let i = inFrontmatter ? 1 : 0; i < lines.length; i++) {
+    const line = lines[i] ?? "";
+
+    if (inFrontmatter && line.trim() === "---") {
+      inFrontmatter = false;
+      continue;
+    }
+    if (inFrontmatter) continue;
+
+    if (line.startsWith("```")) { inCodeBlock = !inCodeBlock; continue; }
+    if (inCodeBlock) continue;
+
+    const match = /^(#{1,4})\s+(.+)$/.exec(line);
+    if (match) {
+      const level = match[1]!.length;
+      const text = match[2]!.replace(/[*_`\[\]]/g, "").trim();
+      const id = slugify(text);
+      toc.push({ level, text, id });
+    }
+  }
+  return toc;
+}
+
 function slugify(text: string): string {
   return text
     .toLowerCase()

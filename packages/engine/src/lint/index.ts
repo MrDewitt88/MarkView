@@ -7,6 +7,7 @@ import { lintA11y } from "./a11y.js";
 const KNOWN_FRONTMATTER_FIELDS = new Set([
   "title",
   "author",
+  "lang",
   "template",
   "header",
   "footer",

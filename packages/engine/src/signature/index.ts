@@ -7,6 +7,14 @@ import type * as ForgeTypes from "node-forge";
  *
  * Uses node-forge for certificate loading and PDF signature embedding.
  * The signed PDF includes a PKCS#7 signature and a timestamp.
+ *
+ * NOTE: This is a proof-of-concept implementation.
+ * The signature is embedded as a PDF comment, NOT as a
+ * standard PDF signature per ISO 32000.
+ * Adobe Acrobat will not recognize this signature.
+ *
+ * For production use, consider integrating a library like
+ * node-signpdf or pdf-lib with proper incremental save support.
  */
 export async function signPdf(
   pdfBuffer: Buffer,

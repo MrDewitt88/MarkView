@@ -8,6 +8,7 @@ export interface RenderResult {
 export interface FrontmatterConfig {
   title?: string;
   author?: string;
+  lang?: string;
   template?: string;
   header?: string;
   footer?: string;

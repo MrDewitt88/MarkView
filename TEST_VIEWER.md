@@ -1,6 +1,7 @@
 ---
-title: MarkView Viewer — Testdokument
-author: MarkView QA Team
+title: TeamMind MarkView — Testdokument
+author: TeamMind QA Team
+lang: de-DE
 template: report
 header: "{{title}} — {{author}}"
 footer: "Seite {{page}} von {{pages}}"
@@ -12,12 +13,21 @@ signature: none
 date: 2026-03-09
 version: 1.0.0
 tags: [test, viewer, mermaid, gfm, showcase]
+style: |
+  .custom-test { color: #e63946; font-weight: bold; }
+vars:
+  company: TeamMind
+  product: MarkView
+qr: https://github.com/MrDewitt88/MarkView
 ---
 
-# MarkView Viewer — Vollständiges Testdokument
+# TeamMind MarkView — Vollständiges Testdokument
 
-> Dieses Dokument testet **jedes Feature**, das der MarkView Viewer beherrschen muss.
+> Dieses Dokument testet **jedes Feature**, das der TeamMind MarkView Viewer beherrschen muss.
 > Wenn alles korrekt gerendert wird, ist der Viewer produktionsreif.
+>
+> Erstellt von **{{company}}** für **{{product}}** v{{version}}.
+> Wörter: {{wordcount}} | Lesezeit: {{readtime}} | Datum: {{date:long}}
 
 ---
 
@@ -102,7 +112,7 @@ manuellen Zeilenumbruch (zwei Leerzeichen + Enter).
 
 1. **Installation**
    - Node.js 20+ installieren
-   - `pnpm install -g @markview/cli`
+   - `pnpm install -g @teammind/markview-cli`
 2. **Konfiguration**
    - Frontmatter in `.md` Datei erstellen
    - Template wählen: `default`, `report`, `minimal`
@@ -115,10 +125,11 @@ manuellen Zeilenumbruch (zwei Leerzeichen + Enter).
 - [x] Monorepo aufsetzen
 - [x] Render Engine implementieren
 - [x] CLI Package erstellen
-- [ ] Electron Viewer bauen
-- [ ] Builder / Editor entwickeln
-- [ ] PPTX Export
-- [ ] Digitale Signatur
+- [x] Electron Viewer bauen
+- [x] Builder / Editor entwickeln
+- [x] TTS Integration (Speaklone)
+- [x] Email Export
+- [x] Digitale Signatur (PoC)
 - [ ] Distribution & CI/CD
 
 ### Definitionsliste (falls unterstützt)
@@ -181,13 +192,13 @@ Frontmatter
 
 ### Inline Code
 
-Nutze `npm install -g @markview/cli` zur Installation. Die Config liegt in `~/.markviewrc`.
+Nutze `npm install -g @teammind/markview-cli` zur Installation. Die Config liegt in `~/.markviewrc`.
 
 ### JavaScript / TypeScript
 
 ```typescript
-import { render, exportPdf, lint } from '@markview/engine';
-import type { RenderResult, ExportOptions } from '@markview/engine';
+import { render, exportPdf, lint } from '@teammind/markview-engine';
+import type { RenderResult, ExportOptions } from '@teammind/markview-engine';
 
 interface ViewerConfig {
   theme: 'light' | 'dark' | 'system';
@@ -438,7 +449,7 @@ fi
 
 ```json
 {
-  "name": "@markview/engine",
+  "name": "@teammind/markview-engine",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -470,9 +481,9 @@ fi
 
 ```yaml
 # electron-builder.yml
-appId: com.markview.app
-productName: MarkView
-copyright: Copyright © 2026 MarkView Contributors
+appId: eu.team-mind.markview
+productName: TeamMind MarkView
+copyright: Copyright © 2026 Digitale Projekte RF GmbH
 
 directories:
   output: dist
@@ -560,7 +571,7 @@ flowchart TD
     L --> M{Export?}
     M -->|PDF| N[Chromium Print]
     M -->|HTML| O[Standalone HTML]
-    M -->|PPTX| P[PptxGenJS]
+    M -->|Email| P[Juice CSS Inliner]
     M -->|Viewer| Q[Electron Render]
 
     style A fill:#4361ee,color:#fff
@@ -577,7 +588,7 @@ flowchart TD
 sequenceDiagram
     participant Agent as KI-Agent
     participant CLI as MarkView CLI
-    participant Engine as @markview/engine
+    participant Engine as @teammind/markview-engine
     participant FS as Dateisystem
 
     Agent->>FS: Schreibt bericht.md
@@ -846,7 +857,7 @@ mindmap
       Export
         PDF
         HTML
-        PPTX
+        Email
       Lint
         Frontmatter
         Links
@@ -884,7 +895,7 @@ journey
       Besucht GitHub Repo: 4: Entwickler
       Liest README: 4: Entwickler
     section Installation
-      npm install -g @markview/cli: 5: Entwickler
+      npm install -g @teammind/markview-cli: 5: Entwickler
       markview render README.md: 5: Entwickler
       Wow, sieht gut aus: 5: Entwickler
     section Daily Use
@@ -956,15 +967,15 @@ journey
 
 ### Links
 
-- Inline-Link: [MarkView auf GitHub](https://github.com/markview/markview)
-- Link mit Titel: [Dokumentation](https://markview.dev/docs "MarkView Docs")
-- Automatischer Link: https://markview.dev
-- Email: <team@markview.dev>
+- Inline-Link: [MarkView auf GitHub](https://github.com/MrDewitt88/MarkView)
+- Link mit Titel: [Dokumentation](https://team-mind.eu/docs "MarkView Docs")
+- Automatischer Link: https://team-mind.eu
+- Email: <team@team-mind.eu>
 - Referenz-Link: [Engine Docs][engine-docs]
 - Interner Link: [Zurück zur Übersicht](#inhaltsübersicht)
 - Relativer Link: [README](./README.md)
 
-[engine-docs]: https://markview.dev/docs/engine "Engine Dokumentation"
+[engine-docs]: https://team-mind.eu/docs/engine "Engine Dokumentation"
 
 ### Bilder
 
@@ -1080,7 +1091,7 @@ Alle drei sollten identisch gerendert werden.
    > Installation starten:
    >
    > ```bash
-   > npm install -g @markview/cli
+   > npm install -g @teammind/markview-cli
    > ```
    >
    > | Befehl | Prüfung |
@@ -1092,9 +1103,9 @@ Alle drei sollten identisch gerendert werden.
 
 | Phase | Details |
 |-------|---------|
-| 1. Engine | `@markview/engine` — Kern-Package mit Render-Pipeline, Plugins (Mermaid, Shiki, Frontmatter, TOC), Export (PDF, HTML, PPTX) und Lint. **Keine GUI-Abhängigkeit.** |
-| 2. CLI | `@markview/cli` — Wrapper um Engine: `render`, `export`, `serve`, `lint`, `sign`. Pipe-kompatibel, JSON-Output, Batch-Verarbeitung. **Installierbar ohne Electron.** |
-| 3. App | `@markview/app` — Electron GUI mit Viewer (read-only) und Builder (Editor + Preview). Importiert `@markview/engine`, dupliziert nichts. |
+| 1. Engine | `@teammind/markview-engine` — Kern-Package mit Render-Pipeline, Plugins (Mermaid, Shiki, Frontmatter, TOC), Export (PDF, HTML, PPTX) und Lint. **Keine GUI-Abhängigkeit.** |
+| 2. CLI | `@teammind/markview-cli` — Wrapper um Engine: `render`, `export`, `serve`, `lint`, `sign`. Pipe-kompatibel, JSON-Output, Batch-Verarbeitung. **Installierbar ohne Electron.** |
+| 3. App | `@teammind/markview-app` — Electron GUI mit Viewer (read-only) und Builder (Editor + Preview). Importiert `@teammind/markview-engine`, dupliziert nichts. |
 
 ---
 
@@ -1180,15 +1191,41 @@ const hidden = "Auch Code in Collapsibles";
 
 ### Autolinks (GFM)
 
-www.markview.dev sollte automatisch ein Link werden.
-Ebenso https://github.com/markview/markview.
-Und eine Email: team@markview.dev.
+www.team-mind.eu sollte automatisch ein Link werden.
+Ebenso https://github.com/MrDewitt88/MarkView.
+Und eine Email: info@team-mind.eu.
+
+---
+
+## 13. Template-Variablen (F4)
+
+Die folgenden Variablen sollten aufgelöst werden:
+
+- Datum: {{date}}
+- Datum lang: {{date:long}}
+- Uhrzeit: {{time}}
+- Wörter: {{wordcount}}
+- Lesezeit: {{readtime}}
+- Titel: {{title}}
+- Autor: {{author}}
+- Firma: {{company}}
+- Produkt: {{product}}
+
+Nicht definierte Variable bleibt stehen: {{undefined_var}}
+
+---
+
+## 14. Custom CSS Test (F10)
+
+<div class="custom-test">
+Dieser Text sollte rot und fett sein, wenn das style-Feld im Frontmatter korrekt angewendet wird.
+</div>
 
 ---
 
 ## Abschluss
 
-Wenn dieses Dokument im MarkView Viewer vollständig und korrekt gerendert wird — mit allen Diagrammen, Tabellen, Code-Blöcken, Formatierungen, Footnotes und Edge Cases — dann ist der Viewer **produktionsreif**.
+Wenn dieses Dokument im TeamMind MarkView Viewer vollständig und korrekt gerendert wird — mit allen Diagrammen, Tabellen, Code-Blöcken, Formatierungen, Footnotes und Edge Cases — dann ist der Viewer **produktionsreif**.
 
 Checkliste:
 
@@ -1211,7 +1248,12 @@ Checkliste:
 - [ ] Dark/Light Mode Toggle
 - [ ] Live-Reload bei Dateiänderung
 - [ ] Print/PDF Output sauber
+- [ ] Template-Variablen aufgelöst (F4)
+- [ ] Custom CSS aus Frontmatter angewendet (F10)
+- [ ] QR-Code im Export-Footer (F11)
+- [ ] Wortanzahl und Lesezeit in Statusleiste (F12)
+- [ ] TTS "Ab hier vorlesen" Kontextmenü (F1)
 
 ---
 
-> *Generiert als Testdokument für MarkView v0.1.0 — März 2026*
+> *Generiert als Testdokument für TeamMind MarkView v0.1.0 — März 2026*

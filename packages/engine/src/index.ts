@@ -1,4 +1,5 @@
 export { render, replaceTemplateVariables, generateHeaderHtml, generateFooterHtml } from "./pipeline.js";
+export { extractTocFromMarkdown } from "./plugins/toc.js";
 export { resolveIncludes } from "./plugins/includes.js";
 export { exportHtml } from "./export/html.js";
 export { exportEmail } from "./export/email.js";

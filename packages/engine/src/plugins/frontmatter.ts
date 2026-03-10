@@ -12,13 +12,15 @@ export function parseFrontmatter(markdown: string): {
 
   if (typeof data.title === "string") frontmatter.title = data.title;
   if (typeof data.author === "string") frontmatter.author = data.author;
+  if (typeof data.lang === "string") frontmatter.lang = data.lang;
   if (typeof data.template === "string") frontmatter.template = data.template;
   if (typeof data.header === "string") frontmatter.header = data.header;
   if (typeof data.footer === "string") frontmatter.footer = data.footer;
   if (typeof data.font === "string") frontmatter.font = data.font;
   if (typeof data.fontSize === "string") frontmatter.fontSize = data.fontSize;
-  if (typeof data.lineHeight === "string")
-    frontmatter.lineHeight = data.lineHeight;
+  else if (typeof data["font-size"] === "string") frontmatter.fontSize = data["font-size"];
+  if (typeof data.lineHeight === "string") frontmatter.lineHeight = data.lineHeight;
+  else if (typeof data["line-height"] === "string") frontmatter.lineHeight = data["line-height"];
   if (typeof data.toc === "boolean") frontmatter.toc = data.toc;
   if (typeof data.signature === "boolean")
     frontmatter.signature = data.signature;
@@ -43,6 +45,12 @@ export function parseFrontmatter(markdown: string): {
     data.qrPosition === "footer-center"
   ) {
     frontmatter.qrPosition = data.qrPosition;
+  } else if (
+    data["qr-position"] === "footer-right" ||
+    data["qr-position"] === "footer-left" ||
+    data["qr-position"] === "footer-center"
+  ) {
+    frontmatter.qrPosition = data["qr-position"];
   }
 
   if (data.collab && typeof data.collab === "object") {

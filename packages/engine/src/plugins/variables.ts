@@ -9,6 +9,8 @@ export function resolveVariables(
   frontmatter: FrontmatterConfig,
   filePath?: string,
 ): string {
+  const locale = frontmatter.lang ?? "de-DE";
+
   // Skip code blocks to avoid replacing inside them
   const codeBlocks: string[] = [];
   const withoutCode = content.replace(/```[\s\S]*?```/g, (match) => {
@@ -26,16 +28,16 @@ export function resolveVariables(
 
   const builtins: Record<string, string> = {
     date: now.toISOString().slice(0, 10),
-    "date:long": now.toLocaleDateString("de-DE", {
+    "date:long": now.toLocaleDateString(locale, {
       year: "numeric",
       month: "long",
       day: "numeric",
     }),
-    time: now.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }),
+    time: now.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" }),
     filename: filePath ? filePath.split("/").pop() ?? "" : "",
     title: frontmatter.title ?? "",
     author: frontmatter.author ?? "",
-    wordcount: wordCount.toLocaleString("de-DE"),
+    wordcount: wordCount.toLocaleString(locale),
     readtime: `${readTime} min`,
   };
 
