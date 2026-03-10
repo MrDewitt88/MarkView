@@ -2,6 +2,7 @@ import { render, replaceTemplateVariables } from "../pipeline.js";
 import type { ExportOptions, FrontmatterConfig } from "../types.js";
 import { buildStyles } from "../templates/index.js";
 import { launchBrowser } from "./browser.js";
+import { generateQrSvg } from "../plugins/qrcode.js";
 
 /**
  * Export Markdown to PDF using Playwright's headless Chromium.
@@ -21,7 +22,19 @@ export async function exportPdf(
     ? buildStyles(options.template, result.frontmatter.font, result.frontmatter.fontSize)
     : result.css;
 
-  const fullHtml = buildPdfHtml(result.html, css, title);
+  // QR code: option override > frontmatter
+  const qrUrl = options?.qr ?? result.frontmatter.qr;
+  const qrPosition = options?.qrPosition ?? result.frontmatter.qrPosition ?? "footer-right";
+  let qrHtml = "";
+  if (qrUrl) {
+    const qrSvg = await generateQrSvg(qrUrl);
+    const alignment =
+      qrPosition === "footer-left" ? "flex-start" :
+      qrPosition === "footer-center" ? "center" : "flex-end";
+    qrHtml = `<div class="markview-qr" style="display:flex;justify-content:${alignment};padding:12px 0;">${qrSvg}</div>`;
+  }
+
+  const fullHtml = buildPdfHtml(result.html, css, title, qrHtml);
 
   const browser = await launchBrowser();
   try {
@@ -110,7 +123,7 @@ function buildPdfOptions(
   return pdfOpts;
 }
 
-function buildPdfHtml(body: string, css: string, title: string): string {
+function buildPdfHtml(body: string, css: string, title: string, qrHtml?: string): string {
   const escapedTitle = title
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -131,6 +144,7 @@ ${css}
     <article class="markview-content">
 ${body}
     </article>
+    ${qrHtml ?? ""}
   </div>
 </body>
 </html>`;

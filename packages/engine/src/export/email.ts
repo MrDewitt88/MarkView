@@ -1,14 +1,14 @@
 import { render, generateHeaderHtml, generateFooterHtml } from "../pipeline.js";
 import type { ExportOptions } from "../types.js";
 import { buildStyles } from "../templates/index.js";
-import { generateQrSvg } from "../plugins/qrcode.js";
+import juice from "juice";
 
 /**
- * Export Markdown to a standalone HTML file with inlined CSS.
- * Mermaid diagrams are already rendered as SVG by the pipeline.
- * Returns a single self-contained HTML string.
+ * Export Markdown to an email-safe HTML string with all CSS inlined.
+ * Uses `juice` to inline styles into element `style` attributes,
+ * strips <script> tags, and avoids external resources.
  */
-export async function exportHtml(
+export async function exportEmail(
   markdown: string,
   options?: ExportOptions,
 ): Promise<string> {
@@ -18,30 +18,17 @@ export async function exportHtml(
   const headerHtml = generateHeaderHtml(result.frontmatter);
   const footerHtml = generateFooterHtml(result.frontmatter);
 
-  // QR code: option override > frontmatter
-  const qrUrl = options?.qr ?? result.frontmatter.qr;
-  const qrPosition = options?.qrPosition ?? result.frontmatter.qrPosition ?? "footer-right";
-  let qrHtml = "";
-  if (qrUrl) {
-    const qrSvg = await generateQrSvg(qrUrl);
-    const alignment =
-      qrPosition === "footer-left" ? "flex-start" :
-      qrPosition === "footer-center" ? "center" : "flex-end";
-    qrHtml = `<div class="markview-qr" style="display:flex;justify-content:${alignment};padding:12px 0;">${qrSvg}</div>`;
-  }
-
-  // Use template override from options if provided, otherwise use from render result
   const css = options?.template
     ? buildStyles(options.template, result.frontmatter.font, result.frontmatter.fontSize)
     : result.css;
 
   const escapedTitle = escapeHtml(title);
 
-  return `<!DOCTYPE html>
+  // Build a full HTML document so juice can resolve selectors
+  const rawHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapedTitle}</title>
   <style>
 ${css}
@@ -53,11 +40,22 @@ ${css}
     <article class="markview-content">
 ${result.html}
     </article>
-    ${qrHtml}
     ${footerHtml}
   </div>
 </body>
 </html>`;
+
+  // Inline all CSS into style attributes
+  const inlined = juice(rawHtml, {
+    removeStyleTags: true,
+    preserveMediaQueries: false,
+    preserveFontFaces: false,
+  });
+
+  // Strip any <script> tags for email safety
+  const sanitized = inlined.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+
+  return sanitized;
 }
 
 function escapeHtml(str: string): string {

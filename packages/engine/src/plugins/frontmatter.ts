@@ -36,6 +36,15 @@ export function parseFrontmatter(markdown: string): {
     frontmatter.vars = vars;
   }
 
+  if (typeof data.qr === "string") frontmatter.qr = data.qr;
+  if (
+    data.qrPosition === "footer-right" ||
+    data.qrPosition === "footer-left" ||
+    data.qrPosition === "footer-center"
+  ) {
+    frontmatter.qrPosition = data.qrPosition;
+  }
+
   if (data.collab && typeof data.collab === "object") {
     const c = data.collab as Record<string, unknown>;
     frontmatter.collab = {

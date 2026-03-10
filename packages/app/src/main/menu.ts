@@ -1,5 +1,6 @@
 import { Menu, app, shell, dialog, type BrowserWindow } from "electron";
 import { installCli, uninstallCli, isCliInstalled } from "./install-cli.js";
+import { checkForUpdatesManually } from "./updater.js";
 
 export function createAppMenu(getWindow: () => BrowserWindow | null): void {
   const isMac = process.platform === "darwin";
@@ -21,6 +22,10 @@ export function createAppMenu(getWindow: () => BrowserWindow | null): void {
                     detail: `Version ${app.getVersion()}\n\nThe missing OS for Markdown — by TeamMind\nhttps://team-mind.eu\n\n© 2026 Digitale Projekte RF GmbH`,
                   });
                 },
+              },
+              {
+                label: "Check for Updates\u2026",
+                click: () => checkForUpdatesManually(),
               },
               { type: "separator" as const },
               {
@@ -138,6 +143,11 @@ export function createAppMenu(getWindow: () => BrowserWindow | null): void {
       submenu: [
         ...(!isMac
           ? [
+              {
+                label: "Check for Updates\u2026",
+                click: () => checkForUpdatesManually(),
+              },
+              { type: "separator" as const },
               {
                 label: "Install 'markview' CLI Command…",
                 click: () => installCli(),

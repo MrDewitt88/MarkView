@@ -2,21 +2,21 @@ import { Command } from "commander";
 import path from "node:path";
 import fs from "node:fs/promises";
 import chalk from "chalk";
-import { exportHtml, signPdf } from "@teammind/markview-engine";
+import { exportHtml, exportEmail, signPdf } from "@teammind/markview-engine";
 import { exportPdf } from "@teammind/markview-engine/pdf";
 import { resolveFiles } from "../utils/glob.js";
 import { getGlobalOptions, log, output } from "../utils/output.js";
 
-type ExportFormat = "pdf" | "html";
+type ExportFormat = "pdf" | "html" | "email";
 
 export function registerExportCommand(program: Command): void {
   program
     .command("export")
-    .description("Export Markdown files to PDF or HTML")
+    .description("Export Markdown files to PDF, HTML, or email-safe HTML")
     .argument("<fileOrGlob>", "Markdown file or glob pattern")
     .requiredOption(
       "--format <format>",
-      "Output format: pdf or html",
+      "Output format: pdf, html, or email",
     )
     .option("--outdir <dir>", "Output directory (default: same as source)")
     .option("--template <name>", "Template: default, report, or minimal")
@@ -27,6 +27,8 @@ export function registerExportCommand(program: Command): void {
     .option("--password <password>", "Password to protect the exported PDF")
     .option("--no-print", "Disable printing in the protected PDF")
     .option("--no-copy", "Disable copying in the protected PDF")
+    .option("--qr <url>", "Embed a QR code linking to this URL")
+    .option("--qr-position <position>", "QR code position: footer-right, footer-left, or footer-center", "footer-right")
     .action(
       async (
         fileOrGlob: string,
@@ -41,15 +43,17 @@ export function registerExportCommand(program: Command): void {
           password?: string;
           print?: boolean;
           copy?: boolean;
+          qr?: string;
+          qrPosition?: string;
         },
         cmd: Command,
       ) => {
         const globalOpts = getGlobalOptions(cmd);
         const format = opts.format as ExportFormat;
 
-        if (!["pdf", "html"].includes(format)) {
+        if (!["pdf", "html", "email"].includes(format)) {
           console.error(
-            `Error: Invalid format "${format}". Use pdf or html.`,
+            `Error: Invalid format "${format}". Use pdf, html, or email.`,
           );
           process.exit(1);
         }
@@ -100,7 +104,8 @@ export function registerExportCommand(program: Command): void {
         for (const file of files) {
           const basename = path.basename(file, ".md");
           const outputDir = outdir ?? path.dirname(file);
-          const outPath = path.join(outputDir, `${basename}.${format}`);
+          const ext = format === "email" ? "html" : format;
+          const outPath = path.join(outputDir, `${basename}.${ext}`);
 
           try {
             const markdown = await fs.readFile(file, "utf-8");
@@ -111,8 +116,18 @@ export function registerExportCommand(program: Command): void {
                 const htmlContent = await exportHtml(markdown, {
                   template: opts.template,
                   basePath,
+                  qr: opts.qr,
+                  qrPosition: opts.qrPosition,
                 });
                 await fs.writeFile(outPath, htmlContent, "utf-8");
+                break;
+              }
+              case "email": {
+                const emailContent = await exportEmail(markdown, {
+                  template: opts.template,
+                  basePath,
+                });
+                await fs.writeFile(outPath, emailContent, "utf-8");
                 break;
               }
               case "pdf": {
@@ -121,6 +136,8 @@ export function registerExportCommand(program: Command): void {
                   paperFormat: opts.paper,
                   basePath,
                   password: opts.password,
+                  qr: opts.qr,
+                  qrPosition: opts.qrPosition,
                 });
 
                 if (opts.sign && opts.cert) {

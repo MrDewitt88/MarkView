@@ -7,6 +7,7 @@ import {
 import {
   render,
   exportHtml,
+  exportEmail,
   lint,
   extractSpeakableText,
   speak,
@@ -39,6 +40,18 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: "export_html",
       description: "Export Markdown to a complete standalone HTML document",
+      inputSchema: {
+        type: "object" as const,
+        properties: {
+          markdown: { type: "string", description: "Markdown content" },
+          template: { type: "string", description: "Template: default, report, or minimal" },
+        },
+        required: ["markdown"],
+      },
+    },
+    {
+      name: "export_email",
+      description: "Export Markdown to email-safe HTML with all CSS inlined into style attributes",
       inputSchema: {
         type: "object" as const,
         properties: {
@@ -145,6 +158,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           template: args.template as string | undefined,
         });
         return { content: [{ type: "text", text: html }] };
+      }
+
+      case "export_email": {
+        const emailHtml = await exportEmail(args.markdown as string, {
+          template: args.template as string | undefined,
+        });
+        return { content: [{ type: "text", text: emailHtml }] };
       }
 
       case "lint": {

@@ -23,6 +23,8 @@ export interface FrontmatterConfig {
     channel?: string;
     sync?: boolean;
   };
+  qr?: string;
+  qrPosition?: "footer-right" | "footer-left" | "footer-center";
 }
 
 export interface TocEntry {
@@ -33,7 +35,7 @@ export interface TocEntry {
 
 export interface ExportOptions {
   template?: string;
-  format?: "pdf" | "html" | "png";
+  format?: "pdf" | "html" | "png" | "email";
   outPath?: string;
   paperFormat?: string;
   landscape?: boolean;
@@ -42,6 +44,8 @@ export interface ExportOptions {
   footerTemplate?: string;
   basePath?: string;
   password?: string;
+  qr?: string;
+  qrPosition?: string;
 }
 
 export interface PdfMargins {

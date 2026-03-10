@@ -18,6 +18,7 @@
     "@teammind/markview-engine": "workspace:*",
     "buffer": "^6.0.3",
     "codemirror": "^6.0.2",
+    "electron-updater": "^6.8.3",
     "katex": "^0.16.38",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

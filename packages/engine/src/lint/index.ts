@@ -24,6 +24,9 @@ const KNOWN_FRONTMATTER_FIELDS = new Set([
   "vars",
   "include",
   "collab",
+  "qr",
+  "qrPosition",
+  "qr-position",
 ]);
 
 /**
